@@ -1,0 +1,23 @@
+body{
+    font-size: 0.9rem;
+}
+
+ #messagePopup{
+    position: fixed;
+    top:-15rem;
+    width:40%;
+    margin-left: 30%;
+    visibility: hidden;
+    opacity: 0; 
+    transition: 0.6s; 
+}
+
+ #messagePopup.active{ 
+    position: fixed;
+     top:8rem;
+    visibility: visible;
+    opacity: 1;
+    transition: 0.6s;
+    z-index: 3;
+}
+ 
