@@ -53,7 +53,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
 
         const { email, password, role } = event.target
         if (!email.value || !password.value || !role.value) {
-            document.getElementById("loginError").innerText = "Error : Please Fill All The Fields";
+            document.getElementById("loginError").innerText = "Error : Please fill all the input fields";
             document.getElementById("loginError").style.color = "red";
             return
         }
@@ -75,6 +75,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
         if (responseJson.error) {
             document.getElementById("loginError").innerText = `Error : ${responseJson.error}`
             document.getElementById("loginError").style.color = `red`;
+            document.getElementById("loader").style.display = "none"
             return;
         }
         document.getElementById("loginClose").click();
@@ -87,6 +88,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             if (responseJson.user.profilePicture) {
                 document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.user.profilePicture}`)
             }
+            document.getElementById("jobCount").innerHTML = `Jobs Completed ${responseJson.user.totalAccepted}`
             document.getElementsByClassName("userName")[0].innerText = `Hi, ${responseJson.user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
@@ -94,15 +96,17 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
                     <div class="card-header bg-info">
-                        <strong>Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
+                        <strong>Hi, ${responseJson.user.name}. Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Please use above links to view all types of Jobs and search according to your interest and location.</p>
+                        <p class="card-text">Please use above links to view all types of Jobs and search according to your interest and location. We believe that you will be making use of this platform for a better cause. </p>
                     </div>
                 </div>
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
+            document.getElementById("loader").style.display = "none";
+            return;
         }
         if (responseJson.user.role == "Job-Provider") {
             document.getElementById("navThree").style.display = "block";
@@ -116,20 +120,22 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
                     <div class="card-header bg-info">
-                        <strong>Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
+                        <strong>Hi, ${responseJson.user.name}. Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Please use above links to post jobs and delete or view posted jobs.</p>
+                        <p class="card-text">Please use above links to post jobs and update,delete jobs. We believe that you will be making use of this platform for a better cause.</p>
                     </div>
                 </div>
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loader").style.display = "none"
             return;
         }
+
         if (responseJson.user.role == "Admin") {
-            document.getElementById("navThree").style.display = "block";
-            if (!responseJson.user.profilePicture) {
+            document.getElementById("navFour").style.display = "block";
+            if (responseJson.user.profilePicture) {
                 document.getElementsByClassName("userPic")[2].setAttribute("src", `${responseJson.user.profilePicture}`)
             }
             document.getElementsByClassName("userName")[2].innerText = `Hi, ${responseJson.user.name}`;
@@ -142,14 +148,16 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
                         <strong>Hi, Admin Welcome Back</strong>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">Please use above links to control users and jobs</p>
+                        <p class="card-text">Please use above links to control and manage Job-Providers, Job-Seekers and Jobs</p>
                     </div>
                 </div>
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loader").style.display = "none"
             return;
         }
+
     }
     catch (error) {
         document.getElementById("loader").style.display = "none"
@@ -387,6 +395,66 @@ function applyJob(jobid) {
         })
 }
 
+function acceptedJobs(pageNumber) {
+
+    document.getElementById("loader").style.display = "block";
+    fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/jobsacceptedtilldate/${pageNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            const jobs = responseJson.jobs;
+            document.getElementById("loader").style.display = "none"
+            if (responseJson.error) return alert(`${responseJson.error}`)
+
+            document.getElementById("loader").style.display = "none";
+            document.getElementById("mainContainer1").style.display = "none"
+            document.getElementById("mainContainer").style.display = "block"
+            document.getElementById("mainContainer").innerHTML = `
+            <div id ="row" class='row justify-content-center mt-3 '></div>`
+            jobs.forEach(job => {
+                document.getElementById("row").innerHTML += `
+      <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
+        <div class="card">
+          <div class="card-header bg-info"><b>Title :</b>${job.title}</div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Time Slot :</b>${job.timeSlot}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Duration :</b>${job.duration}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Rate of Payment(in Rs) :</b>${job.rateOfPayment}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Preferred Skill :</b>${job.preferedSkills}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Preference :</b>${job.preference}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>City :</b>${job.city}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Pincode :</b>${job.pincode}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Address :</b>${job.address}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Provider Name :</b>${job.jobProviderName}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Provider Email :</b>${job.jobProviderEmail}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>postedAt :</b>${job.updatedAt}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Description :</b>${job.description}</div>
+            </div>
+          </div>
+        </div>
+      </div>`
+            })
+            let pagination = document.createElement("div")
+            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+            pagination.innerHTML = `<nav class="mt-5 mr-1">
+        <ul id="pagination" class="pagination justify-content-center">
+        </ul>
+      </nav>`
+            for (let i = 0; i <= (responseJson.count / 10); i++) {
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+            }
+            document.getElementById("loader").style.display = "none"
+            document.getElementById("jobCount").innerHTML = `Jobs Completed ${responseJson.count}`
+        })
+}
+
 function logoutSubmit() {
     document.getElementById("loader").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
@@ -403,6 +471,7 @@ function logoutSubmit() {
     })
         .then(response => response.json())
         .then(responseJson => {
+            
             document.getElementById("loader").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
             document.getElementById("message").innerText = `${responseJson.message}`
@@ -630,13 +699,14 @@ function postJob() {
             <div id="jobPostError"></div>
                 <form id="formPostJob">
                     <div class="form-group">
-                        <label for="exampleInputEmail1">Name</label>
+                        <label for="exampleInputEmail1">Title</label>
                         <input id="jobTitle" type="text" name="title" class="form-control" id="exampleInputEmail1"
                             aria-describedby="emailHelp">
                     </div>
                         <div class="form-group">
                             <label for="exampleInputEmail1">Category</label>
                             <select id="jobCategory" name="">
+                            <option value="" disabled>Select Category</option>
                                 <option value="Hourly">Hourly</option>
                                 <option value="Daily">Daily</option>
                                 <option value="Weekly">Weekly</option>
@@ -658,11 +728,12 @@ function postJob() {
 
                     <div class="form-group">
                         <label for="exampleInputEmail1">Preference</label>
-                        <select id="jobPreference" name="">
-                            <option value="Hourly">Male</option>
-                            <option value="Daily">Female</option>
-                            <option value="Weekly">Transgender</option>
-                            <option value="Monthly">Any</option>
+                        <select id="jobPreference"  name="">
+                            <option value="" disabled>Select Preference</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Transgender">Transgender</option>
+                            <option value="Any">Any</option>
                         </select>
                     </div>
 
@@ -729,11 +800,127 @@ function postJob() {
 </div>`
 }
 
+function updateJob(jobid) {
+    let jobs =JSON.parse(localStorage.getItem('toUpdateJob'))
+    const job = jobs.filter(element => {
+        return element._id == jobid
+    })
+    document.getElementById('mainContainer').style.display = "none"
+    document.getElementById("mainContainer1").style.display = "block"
+    document.getElementById("mainContainer1").innerHTML = `<div class="text-left">
+    <button onclick="back()" type="button" class="btn btn-primary ml-5 mt-2"
+        style="width:100px;border-top-left-radius: 0.8rem;border-bottom-left-radius: 0.8rem;">Back</button>
+</div>
+<div class="row justify-content-center mt-2 ">
+    <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
+        <div class="card">
+            <div class="card-header bg-info text-center"><b>Post Your Job</b></div>
+            <div class="card-body">
+            <div id="jobPostError"></div>
+                <form id="formPostJob">
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Name</label>
+                        <input id="jobTitle" type="text" name="title" value="${job[0].title}" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                    </div>
+                        <div class="form-group">
+                            <label for="exampleInputEmail1">Category</label>
+                            <select id="jobCategory" value="${job[0].category}" name="">
+                                <option value="Hourly">Hourly</option>
+                                <option value="Daily">Daily</option>
+                                <option value="Weekly">Weekly</option>
+                                <option value="Monthly">Monthly</option>
+                            </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Duration</label>
+                        <input id="jobDuration" value="${job[0].duration}" type="text" name="" class="form-control" id="exampleInputEmail1"
+                            aria-describedby="emailHelp">
+                    </div>
 
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Description</label>
+                        <input id="jobDescription" value="${job[0].description}" type="text" name="" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Preference</label>
+                        <select id="jobPreference" value="${job[0].preference}" name="">
+                            <option value="Hourly">Male</option>
+                            <option value="Daily">Female</option>
+                            <option value="Weekly">Transgender</option>
+                            <option value="Monthly">Any</option>
+                        </select>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Rate of Payment</label>
+                        <input type="text" value="${job[0].rateOfPayment}"  id='jobRateOfPayment' name="" class="form-control"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Prefered Skills</label>
+                        <input type="text" value="${job[0].preferedSkills}" id='jobPreferedSkills' name="" class="form-control"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Time Slot</label>
+                        <input type="text" id='jobTimeSlot' value="${job[0].timeSlot}" name="" class="form-control"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Contact Number
+                        </label>
+                        <input type="text" name="address" value="${job[0].contactNumber}" id="jobContactNumber" class="form-control"
+                           id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">City</label>
+                        <input type="text" name="" value="${job[0].city}" id="jobCity" class="form-control"
+                           id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Pincode</label>
+                        <input type="text" name="" id="jobPincode" value="${job[0].pincode}" class="form-control"
+                             id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Address</label>
+                        <input type="text" name="address" value="${job[0].address}" id="jobAddress" class="form-control"
+                             id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Keyword</label>
+                        <input type="text" value="${job[0].keyword}" class="form-control" id="jobKeyword"
+                            id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+            </div>
+            <div class="text-center">
+                <button id="" type="button" id="applyJob" class="btn mt-2 mb-2 bg-success text-white"
+                     onclick="updateJobSubmit('${job[0]._id}')">Post Job</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>`
+}
 
 function postJobSubmit() {
     const title = document.getElementById("jobTitle").value
-    const category = document.getElementById("jobCategoty").value
+    const category = document.getElementById("jobCategory").value
     const duration = document.getElementById("jobDuration").value
     const description = document.getElementById("jobDescription").value
     const rateOfPayment = document.getElementById("jobRateOfPayment").value
@@ -745,7 +932,7 @@ function postJobSubmit() {
     const pincode = document.getElementById("jobPincode").value
     const address = document.getElementById("jobAddress").value
     const keyword = document.getElementById("jobKeyword").value
-    if (!title || category || !duration || !description || !rateOfPayment || !preferedSkills || !preference ||
+    if (!title || !category || !duration || !description || !rateOfPayment || !preferedSkills || !preference ||
         !timeSlot || !contactNumber || !city || !pincode || !address || !keyword) {
         document.getElementById("jobPostError").innerText = `Please Fill All The Inputs`;
         document.getElementById("jobPostError").style.color = "red";
@@ -783,9 +970,13 @@ function postJobSubmit() {
             document.getElementById("message").innerText = `${responseJson.message}`
             messagePopupToggle();
         })
+        .catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
 }
 
-function postedJobs(pageNumber) {
+function postedJobs(pageNumber){
     document.getElementById("loader").style.display = "block";
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobprovider/jobspostedtilldate/${pageNumber}`, {
         method: "GET",
@@ -797,16 +988,24 @@ function postedJobs(pageNumber) {
         .then(response => response.json())
         .then(responseJson => {
             const jobs = responseJson.jobs;
+            localStorage.setItem('toUpdateJob',JSON.stringify(jobs))
             document.getElementById("loader").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
 
             document.getElementById("loader").style.display = "none";
             document.getElementById("mainContainer1").style.display = "none"
             document.getElementById("mainContainer").style.display = "block"
-            document.getElementById("mainContainer").innerHTML = `<div class="text-left">
-            <button onclick="back()" type="button" class="btn btn-primary ml-5 mt-2" style="width:100px;border-top-left-radius: 0.8rem;border-bottom-left-radius: 0.8rem;">Back</button>
-            </div><div id ="row" class='row justify-content-center mt-3 '></div>`
+            document.getElementById("mainContainer").innerHTML = `
+            <div id ="row" class='row justify-content-center mt-3 '></div>`
+            var hai;
+            var status;
             jobs.forEach(job => {
+                hai = null;
+                status = "Not Completed"
+                if (job.isAccepted == true) {
+                    hai = "diabled";
+                    status = "Completed";
+                }
                 document.getElementById("row").innerHTML += `
       <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
@@ -822,10 +1021,16 @@ function postedJobs(pageNumber) {
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>City :</b>${job.city}</div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Pincode :</b>${job.pincode}</div>
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Address :</b>${job.address}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Seeker Name :</b>${job.jobSeekerName}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Seeker Number :</b>${job.JobSeekerContactNumber}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>postedAt :</b>${job.updatedAt}</div>
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Status :</b>${status}</div>
+              
+              <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Description :</b>${job.description}</div>
             </div>
             <div class="text-right"> 
-            <button type="button" id="deleteJobb" class="btn mt-3 btn-danger"  onclick='deleteJob("${job._id}")'>Delete Job</button>
-              <button type="button"  class="btn mt-3 btn-success" onclick='updateJob("${job._id}")'>Update Job</button>
+            <button type="button" id="${job._id}" class="btn mt-3 btn-danger ${hai}"  onclick='deleteJob("${job._id}")'>Delete Job</button>
+              <button type="button"  class="btn mt-3 btn-success ${hai}"  onclick='updateJob("${job._id}")'>Update Job</button>
           </div> 
           </div>
         </div>
@@ -841,6 +1046,9 @@ function postedJobs(pageNumber) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
             document.getElementById("loader").style.display = "none"
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
         })
 }
 
@@ -848,7 +1056,7 @@ function postedJobs(pageNumber) {
 function updateJobSubmit(jobid) {
 
     const title = document.getElementById("jobTitle").value
-    const category = document.getElementById("jobCategoty").value
+    const category = document.getElementById("jobCategory").value
     const duration = document.getElementById("jobDuration").value
     const description = document.getElementById("jobDescription").value
     const rateOfPayment = document.getElementById("jobRateOfPayment").value
@@ -892,6 +1100,9 @@ function updateJobSubmit(jobid) {
             if (responseJson.error) return alert(`${responseJson.error}`)
             document.getElementById("message").innerText = `${responseJson.message}`
             messagePopupToggle();
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
         })
 
 }
@@ -907,8 +1118,269 @@ function deleteJob(jobid) {
         .then(response => response.json())
         .then(responseJson => {
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("deleteJobb").innerText = `Job Deleted`
+            document.getElementById(`${jobid}`).innerText = `Job Deleted`
             document.getElementById("message").innerText = `${responseJson.message}`
             messagePopupToggle();
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function adminAllJobs(pageNumber) {
+    document.getElementById("loader").style.display = "block"
+    fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allavailablejobs/${pageNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            document.getElementById("mainContainer1").style.display = "none"
+            document.getElementById("mainContainer").style.display = "block"
+            document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
+            var isBlocked = null;
+            var Block = "Block"
+            var success = "success"
+            responseJson.jobs.forEach(job => {
+                if (job.isBlocked == true) { isBlocked = "disabled"; Block = "Blocked"; success = "danger" }
+                document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
+                <div class="card">
+                  <div class="card-header bg-info"><b>Title :${job.title}</b></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Time Slot :</b>${job.timeSlot}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Duration :</b>${job.duration}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Preference :</b>${job.preference}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Prefered Skills :</b>${job.preferedSkills}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>City :</b>${job.city}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Pincode :</b>${job.pincode}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>PostedAt :</b>${job.updatedAt}</div>
+                      <div class="col-12 col-sm-16 col-md-16 col-lg-6 col-xl-6"><b>Job Provider Name :</b>${job.jobProviderName}</div>
+                      <div class="col-12 col-sm-16 col-md-16 col-lg-6 col-xl-6"><b>Contact Number :</b>${job.contactNumber}</div>
+                      <div class="col-12 col-sm-16 col-md-16 col-lg-6 col-xl-6"><b>Job Provider Email :</b>${job.jobProviderEmail}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Description :</b>${job.description}</div>
+                    </div>
+                    <div class="text-right"> 
+                      <button type="button" id=${job._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${job._id}','Job')">${Block}</button>
+                  </div> 
+                  </div>
+                </div>
+              </div>`
+            })
+            let pagination = document.createElement("div")
+            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+            pagination.innerHTML = `<nav class="mt-5 mr-1">
+    <ul id="pagination" class="pagination justify-content-center">
+    </ul>
+  </nav>`
+            for (let i = 0; i <= (responseJson.count / 10); i++) {
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+            }
+            document.getElementById("loader").style.display = "none"
+
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function adminAllAcceptedJobs(pageNumber) {
+
+    document.getElementById("loader").style.display = "block"
+    fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allacceptedjobs/${pageNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            document.getElementById("mainContainer1").style.display = "none"
+            document.getElementById("mainContainer").style.display = "block"
+            document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
+            var isBlocked = null;
+            responseJson.jobs.forEach(job => {
+                document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
+                <div class="card">
+                  <div class="card-header bg-info"><b>Title :${job.title}</b></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Time Slot :</b>${job.timeSlot}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Duration :</b>${job.duration}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Preference :</b>${job.preference}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Prefered Skills :</b>${job.preferedSkills}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>City :</b>${job.city}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Pincode :</b>${job.pincode}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>PostedAt :</b>${job.updatedAt}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Description :</b>${job.description}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Job Provider Name :</b>${job.jobProviderName}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Job Provider Number :</b>${job.contactNumber}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Job Provider Email :</b>${job.jobProviderEmail}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Job Seeker Name :</b>${job.jobSeekerName}</div>
+                      <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Job Seeker Number :</b>${job.jobSeekerContactNumber}</div>
+                    </div>
+                  </div>
+                </div>
+              </div>`
+            })
+            let pagination = document.createElement("div")
+            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+            pagination.innerHTML = `<nav class="mt-5 mr-1">
+    <ul id="pagination" class="pagination justify-content-center">
+    </ul>
+  </nav>`
+            for (let i = 0; i <= (responseJson.count / 10); i++) {
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllAcceptedJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+            }
+            document.getElementById("loader").style.display = "none"
+
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function adminAllProviders(pageNumber) {
+    document.getElementById("loader").style.display = "block"
+    fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allproviders/${pageNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            document.getElementById("mainContainer1").style.display = "none"
+            document.getElementById("mainContainer").style.display = "block"
+            document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
+            var isBlocked = null;
+            var Block = "Block"
+            var success = "success"
+            responseJson.jobProviders.forEach(jobProvider => {
+                if (jobProvider.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "danger" }
+                document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
+                <div class="card">
+                  <div class="card-header bg-info"><b>Title :${jobProvider.name}</b></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Email :</b>${jobProvider.email}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Aadhaar Number :</b>${jobProvider.aadhaarNumber}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Gender :</b>${jobProvider.gender}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Contact Number :</b>${jobProvider.contactNumber}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Address :</b>${jobProvider.address}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Total Posted Jobs :</b>${jobProvider.totalPosted}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobProvider.role}</div>
+                    </div>
+                    <div class="text-right"> 
+                      <button type="button" id=${jobProvider._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobProvider._id}','Job-Provider')">${Block}</button>
+                  </div> 
+                  </div>
+                </div>
+              </div>`
+               
+            })
+            let pagination = document.createElement("div")
+            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+            pagination.innerHTML = `<nav class="mt-5 mr-1">
+    <ul id="pagination" class="pagination justify-content-center">
+    </ul>
+  </nav>`
+            for (let i = 0; i <= (responseJson.count / 10); i++) {
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllProviders("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+            }
+            document.getElementById("loader").style.display = "none"
+
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function adminAllSeekers(pageNumber) {
+    document.getElementById("loader").style.display = "block"
+    fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allseekers/${pageNumber}`, {
+        method: "GET",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            document.getElementById("mainContainer1").style.display = "none"
+            document.getElementById("mainContainer").style.display = "block"
+            document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
+            var isBlocked = null;
+            var Block = "Block"
+            var success = "success"
+            responseJson.jobSeekers.forEach(jobSeeker => {
+                if (jobSeeker.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "danger" }
+                document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
+                <div class="card">
+                  <div class="card-header bg-info"><b>Title :${jobSeeker.name}</b></div>
+                  <div class="card-body">
+                    <div class="row">
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Email :</b>${jobSeeker.email}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Aadhaar Number :</b>${jobSeeker.aadhaarNumber}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Gender :</b>${jobSeeker.gender}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Contact Number :</b>${jobSeeker.contactNumber}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Address :</b>${jobSeeker.address}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Total Posted Jobs :</b>${jobSeeker.totalAccepted}</div>
+                      <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobSeeker.role}</div>
+                    </div>
+                    <div class="text-right"> 
+                      <button type="button" id=${jobSeeker._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobSeeker._id}','Job-Seeker')">${Block}</button>
+                  </div> 
+                  </div>
+                </div>
+              </div>`
+                let pagination = document.createElement("div")
+                document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+                pagination.innerHTML = `<nav class="mt-5 mr-1">
+        <ul id="pagination" class="pagination justify-content-center">
+        </ul>
+      </nav>`
+                for (let i = 0; i <= (responseJson.count / 10); i++) {
+                    document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+                }
+                document.getElementById("loader").style.display = "none"
+            })
+
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function adminBlock(id, model) {
+    console.log(id)
+    console.log(model)
+
+    if(!id) return alert("Blocked Already")
+    fetch(`https://seasonal-jobs.herokuapp.com/api/admin/${id}/isblocked/?model=${model}`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+            "Authorization": `${(localStorage.getItem('Authorization'))}`
+        },
+    })
+        .then(response => response.json())
+        .then(responseJson => {
+            if (responseJson.error) return alert(`${responseJson.error}`)
+            document.getElementById(`${id}`).innerText = `Blocked`
+            document.getElementById(`${id}`).style.backgroundColor = `red`
+            document.getElementById(`${id}`).classList.add('disabled');
+            document.getElementById("message").innerText = `${responseJson.message}`
+            messagePopupToggle();
+        }).catch(error => {
+            alert(error.message)
+            console.log(error)
         })
 }

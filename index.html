@@ -301,10 +301,11 @@
                     </form>
                 </li>
             </ul>
+            <a onclick="acceptedJobs()" style="text-decoration: none;" href="#"><div id ="jobCount" style="margin-right: 10px; margin-left:20px; font-size: 1rem; color:white;"></div></a>
             <img class="userPic"
                 src="./images.png"
                 alt="" height=40px width=40px style="border-radius: 50%;">
-            <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
+            <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 10px; margin-left:10px; font-size: 1rem; color:white;"></div></a>
             <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
                 aria-pressed="false" autocomplete="off">
                 Logout
@@ -355,21 +356,19 @@
                     <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">All Jobs</a>
+                    <a class="nav-link" onclick="adminAllJobs('1')" href="#">All Jobs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Completed Jobs</a>
+                    <a class="nav-link" onclick="adminAllAcceptedJobs('1')" href="#">Completed Jobs</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">All Job Providers</a>
+                    <a class="nav-link" onclick="adminAllProviders('1')" href="#">All Job Providers</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">All Job Seeker</a>
+                    <a class="nav-link" onclick="adminAllSeekers('1')" href="#">All Job Seekers</a>
                 </li>
             </ul>
-            <img class="userPic"
-            src="./images.png"
-                alt="imgg" height=40px width=40px style="border-radius: 50%;">
+            <img class="userPic" src="./images.png" height=40px width=40px style="border-radius: 50%;">
                 <a  style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
             <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
                 aria-pressed="false" autocomplete="off">
@@ -388,7 +387,7 @@
                         <strong>Seasonal-Jobs.com</strong>
                     </div>
                     <div class="card-body">
-                        <p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
+                        <p class="card-text">Seasonal Jobs is a platform, which brings Help-Seekers and Help-Providers together. Here the Help-Seekers are the Job-Providers and Help-Providers are Job-Seekers. This platform is more helpful for the common people who wants to earn money by doing part-time jobs those who want to live on their own by reducing burden on their parents.</p>
                     </div>
                 </div>
             </div>
