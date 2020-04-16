@@ -11,21 +11,75 @@
 
     <title>Seasonal-Jobs</title>
   </head>
-  <body>
+  <body style="background-color: rgb(0, 0, 0,0.15);">
         <!-- -----------------Nav Bar 1------------- -->
-    <nav id="navOne" class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(104, 201, 246); ">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
+    <nav id="navOne"  class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8; ">
+        <a style="color:white" class="navbar-brand" href="#">Seasonal Jobs</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a style="color:white" id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <b>Category</b>   
+                    </a>
+                    <div id="category" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a id="Hourly" onclick='queryJobs("category","Hourly","1")' class="dropdown-item"
+                            href="#">Hourly</a>
+                        <a id="Daily" onclick='queryJobs("category","Daily","1")' class="dropdown-item"
+                            href="#">Daily</a>
+                        <a id="Weekly" onclick='queryJobs("category","Weekly","1")' class="dropdown-item"
+                            href="#">Weekly</a>
+                        <a id="Monthly" onclick='queryJobs("category","Monthly","1")' class="dropdown-item"
+                            href="#">Monthly</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <b>Preference</b>
+                    </a>
+                    <div id="preference" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a id="Male" onclick='queryJobs("preference","Male","1")' class="dropdown-item"
+                            href="#">Male</a>
+                        <a id="Female" onclick='queryJobs("preference","Female","1")' class="dropdown-item"
+                            href="#">Female</a>
+                        <a id="Transgender" onclick='queryJobs("preference","Transgender","1")' class="dropdown-item"
+                            href="#">Transgender</a>
+                        <a id="Any" onclick='queryJobs("preference","Any","1")' class="dropdown-item" href="#">Any</a>
+                    </div>
+                </li>
+                <li>
+                    <form id="city" class="form-inline my-2 my-lg-0">
+                        <input name="city" class="form-control mr-sm-2" style="height: 35px;width: 180px;"type="search" placeholder="Search By City"
+                            aria-label="Search">
+                    </form>
+                </li>
+                <li>
+                    <form id="pincode" class="form-inline my-2 my-lg-0">
+                        <input name="pincode" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Pincode"
+                            aria-label="Search">
+                    </form>
+                </li>
+                <li>
+                    <form id="keyword" class="form-inline my-2 my-lg-0">
+                        <input name="keyword" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Keyword"
+                            aria-label="Search">
+                    </form>
+                </li>
+            </ul>
             <div class="ml-auto">
+
                 <!-- -------------------Login Form---------------- -->
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalCenter">
                     Login
                 </button>
 
@@ -54,31 +108,28 @@
                                         <input type="password" name="password" class="form-control"
                                             id="exampleInputPassword1" placeholder="Password">
                                     </div>
-                                    <div class="text-center mb-5">
                                         <div class="form-group ">
                                             <label for="exampleInputEmail1">Role</label><br>
-                                            <select name="role" id="">
+                                            <select class="form-control" name="role" id="">
                                                 <option selected disabled value="">Select Role</option>
                                                 <option value="Admin">Admin</option>
                                                 <option value="Job-Provider">Job-Provider</option>
                                                 <option value="Job-Seeker">Job-Seeker</option>
                                             </select>
-
-                                        </div>
                                     </div>
 
                                     <div class="form-check">
                                     </div>
-                                    <div class="text-center"><button type="button" class="btn btn-danger "
+                                    <div class="text-center"><button type="button" class="btn btn-outline-danger "
                                             id="loginClose" data-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-success">Login</button><br><br></div>
+                                        <button type="submit" class="btn btn-outline-info">Login</button><br><br></div>
 
                                 </form>
 
                                 <!-- ----------------Forgot Password Form- -->
                                 <!-- Button trigger modal -->
                                 <div class="text-center mt-4 ">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                         data-target="#exampleModal">
                                         Forgot Password?
                                     </button>
@@ -112,22 +163,22 @@
                                                             id="exampleInputEmail1" aria-describedby="emailHelp"
                                                             placeholder="Aadhaar Number">
                                                     </div>
-                                                   <div class="text-center"> <div class="form-group mb-4">
+                                                    <div class="form-group mb-4">
                                                     <label for="exampleInputEmail1">Role</label><br>
-                                                    <select name="role" id="">
+                                                    <select class= "form-control" name="role" id="">
                                                         <option selected disabled value="">Select Role</option>
                                                         <option value="Job-Provider">Job-Provider</option>
                                                         <option value="Job-Seeker">Job-Seeker</option>
                                                     </select>
 
-                                                </div></div>
+                                                </div>
                                                     <div class="form-check mb-4">
                                                     </div>
                                                     <div class="text-center mt-5"><button type="button"
-                                                            class="btn btn-danger mb-4 " id="forgotPasswordClose"
+                                                            class="btn btn-outline-danger mb-4 " id="forgotPasswordClose"
                                                             data-dismiss="modal">Close</button>
                                                         <button type="submit"
-                                                            class="btn btn-success mb-4">Submit</button></div>
+                                                            class="btn btn-outline-info mb-4">Submit</button></div>
 
                                                 </form>
                                             </div>
@@ -148,7 +199,7 @@
                 <!-- ---------------Register Form ------------------ -->
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalLong">
                     Register
                 </button>
 
@@ -183,22 +234,22 @@
                                             id="exampleInputEmail1" aria-describedby="emailHelp"
                                             placeholder="aadhaarNumber">
                                     </div>
-                                    <div class="text-center"><div class="form-group">
+                                    <div class="form-group">
                                         <select name="gender" id="">
-                                            <option selected disabled value="">Select Gender</option>
+                                            <option class="form-control" selected disabled value="">Select Gender</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                             <option value="Transgender">Transgender</option>
                                         </select>
-                                    </div></div>
+                                    </div>
                                     
-                                    <div class="text-center"><div class="form-group ">
+                                    <div class="form-group ">
                                         <select name="role" id="">
-                                            <option selected disabled value="">Select Role</option>
+                                            <option class="form-control" selected disabled value="">Select Role</option>
                                             <option value="Job-Provider">Job-Provider</option>
                                             <option value="Job-Seeker">Job-Seeker</option>
                                         </select>
-                                    </div></div>
+                                    </div>
                                     
                                     <div class="form-group">
                                         <input type="text" name="contactNumber" class="form-control"
@@ -212,9 +263,9 @@
                                     <div class="form-check mb-4">
                                     </div>
                                     <div class="text-center mt-5">
-                                        <button id="registerClose" type="button" class="btn btn-danger"
+                                        <button id="registerClose" type="button" class="btn btn-outline-danger"
                                         data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success ">Register</button>
+                                    <button type="submit" class="btn btn-outline-info ">Register</button>
                                     </div>
                                    
                                 </form>
@@ -238,8 +289,7 @@
 
 
     <!-- ------------------------Nav 2--------------- -->
-    <nav id="navTwo" class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(104, 201, 246); display: none;">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
+    <nav id="navTwo" class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8; display:none ;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -248,10 +298,14 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
+                    <a style="color:white" class="navbar-brand" href="#">Seasonal Jobs</a>
+                </li>
+                
+                <li class="nav-item active">
+                    <a style="color:white" id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>Category</b>   
                     </a>
@@ -267,7 +321,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>Preference</b>
                     </a>
@@ -283,37 +337,36 @@
                 </li>
                 <li>
                     <form id="city" class="form-inline my-2 my-lg-0">
-                        <input name="city" class="form-control mr-sm-2" type="search" placeholder="Search By City"
+                        <input name="city" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By City"
                             aria-label="Search">
                     </form>
                 </li>
                 <li>
                     <form id="pincode" class="form-inline my-2 my-lg-0">
-                        <input name="pincode" class="form-control mr-sm-2" type="search" placeholder="Search By Pincode"
+                        <input name="pincode" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Pincode"
                             aria-label="Search">
                     </form>
                 </li>
                 <li>
                     <form id="keyword" class="form-inline my-2 my-lg-0">
-                        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search By Keyword"
+                        <input name="keyword" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Keyword"
                             aria-label="Search">
                     </form>
                 </li>
             </ul>
-            <a onclick="acceptedJobs()" style="text-decoration: none;" href="#"><div id ="jobCount" style="margin-right: 10px; margin-left:20px; font-size: 1rem; color:white;"></div></a>
+            <a style=" border:solid 1.5px white;padding: 2px; ;"onclick="acceptedJobs()" style="text-decoration: none;" href="#"><div id ="jobCount" style="margin-right: 10px; font-size: 1rem; color:white;"></div></a>
             <img class="userPic"
                 src="./images.png"
                 alt="" height=40px width=40px style="border-radius: 50%;">
             <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 10px; margin-left:10px; font-size: 1rem; color:white;"></div></a>
-            <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
+            <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
                 aria-pressed="false" autocomplete="off">
                 Logout
             </button>
         </div>
 </nav>
     <!-- -----------------Nav Bar 3 ------------- -->
-<nav id="navThree" class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(104, 201, 246);display:none">
-    <a class="navbar-brand" href="#">Seasonal Jobs</a>
+<nav id="navThree" class="navbar navbar-expand-lg navbar-light " style="background-color: #17a2b8;display: none">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -322,28 +375,31 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a style="color:white" class="navbar-brand" href="#">Seasonal Jobs</a>
+            </li>
+            <li class="nav-item active">
+                <a style="color:white" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="postJob()">Post Job</a>
+                <a style="color:white" class="nav-link" href="#" onclick="postJob()">Post Job</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" href="#" onclick="postedJobs('1')">Posted Jobs</a>
+                <a style="color:white" class="nav-link" href="#" onclick="postedJobs('1')">Posted Jobs</a>
             </li>
         </ul>
+        <a style="color:white"  class="nav-link"  href="#" onclick="postedJobs('1')"><div style="border:solid white 2px; padding: 2px 3px;" id="countPostedJobs">Jobs Posted</div></a>
         <img class="userPic"
         src="./images.png"
-            alt="imgg" height=40px width=40px style="border-radius: 50%;">
-            <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
-        <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
+            alt="imgg" height=40px width=40px style="border-radius: 50%;margin-right: 10px;">
+            <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px;  font-size: 1rem; color:white;"></div></a>
+        <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
             aria-pressed="false" autocomplete="off">
             Logout
         </button>
     </div>
 </nav>
  <!-- -----------------Nav Bar 4 ------------- -->
- <nav id="navFour" class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(104, 201, 246);display:none">
-    <a class="navbar-brand" href="#">Seasonal Jobs</a>
+ <nav id="navFour" class="navbar navbar-expand-lg navbar-light " style="background-color: #17a2b8;display:none">
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
         aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -352,24 +408,27 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                <a style="color:white" class="navbar-brand" href="#">Seasonal Jobs</a>
+            </li>
+            <li class="nav-item active">
+                <a style="color:white" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="adminAllJobs('1')" href="#">All Jobs</a>
+                <a style="color:white" class="nav-link" onclick="adminAllJobs('1')" href="#">All Jobs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="adminAllAcceptedJobs('1')" href="#">Completed Jobs</a>
+                <a style="color:white" class="nav-link" onclick="adminAllAcceptedJobs('1')" href="#">Completed Jobs</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" onclick="adminAllProviders('1')" href="#">All Job Providers</a>
+                <a style="color:white" class="nav-link" onclick="adminAllProviders('1')" href="#">All Job Providers</a>
             </li>
-            <li class="nav-item">
-                <a class="nav-link" onclick="adminAllSeekers('1')" href="#">All Job Seekers</a>
+            <li  class="nav-item">
+                <a style="color:white" class="nav-link" onclick="adminAllSeekers('1')" href="#">All Job Seekers</a>
             </li>
         </ul>
         <img class="userPic" src="./images.png" height=40px width=40px style="border-radius: 50%;">
             <a  style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
-        <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
+        <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
             aria-pressed="false" autocomplete="off">
             Logout
         </button>
@@ -382,7 +441,7 @@
     <div class="row d-flex justify-content-center mt-5">
         <div class="col-11 col-sm-11 col-md-8 col-lg-8 col-xl-8 mt-5">
             <div class="card text-center">
-                <div class="card-header bg-info">
+                <div class="card-header bg-info text-light">
                     <strong>Seasonal-Jobs.com</strong>
                 </div>
                 <div class="card-body">
@@ -401,8 +460,7 @@
 <div class="col-12">
 </div>
 <div class="card text-center">
-    <div class="card-header bg-success text-white">
-        Woohoo...
+    <div id="messageHeader" class="card-header bg-success text-white">
     </div>
     <div class="card-body">
         <p id="message" class="card-text"></p>
@@ -414,48 +472,12 @@
 
 
 <!-- -------------------Spinner---------->
-<style>
-    .loader {
-        border: 16px solid #f3f3f3;
-        border-radius: 50%;
-        border-top: 16px solid #3498db;
-        width: 120px;
-        height: 120px;
-        -webkit-animation: spin 2s linear infinite;
-        /* Safari */
-        animation: spin 2s linear infinite;
-    }
 
-    /* Safari */
-    @-webkit-keyframes spin {
-        0% {
-            -webkit-transform: rotate(0deg);
-        }
-
-        100% {
-            -webkit-transform: rotate(360deg);
-        }
-    }
-
-    @keyframes spin {
-        0% {
-            transform: rotate(0deg);
-        }
-
-        100% {
-            transform: rotate(360deg);
-        }
-    }
-
-    #loader {
-        position: fixed;
-        left: 46%;
-        top: 13rem;
-        display: none;
-    }
-</style>
-
-<div id="loader" class="loader"></div>
+<div id="loading" style="position: absolute;top: 50%; left: 50%;transform: translate(-50%,-50%);display:none "class="text-center">
+    <div class="spinner-border" style="width: 4rem;height: 4rem;" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
