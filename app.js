@@ -581,7 +581,7 @@ function logoutSubmit() {
     document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
     console.log(user)
-    console.log(user.role)
+    console.log(localStorage.getItem('Authorization'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
     if (user.role == "Admin") var User = "admin"
