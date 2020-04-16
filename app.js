@@ -1,88 +1,105 @@
-if (!localStorage.getItem("Authorization")) {
-    document.getElementById("navOne").style.display = "block"
-    document.getElementById("welcome").style.display = "block"
-    window.location.hash=""
-
+function homePage(){
+    if (!localStorage.getItem("Authorization")) {
+        document.getElementById("navOne").style.display = "block"
+        document.getElementById("mainContainer").innerHTML = `
+        <div id="welcome" style="display: none;"class="row d-flex justify-content-center mt-5">
+        <div class="col-11 col-sm-11 col-md-8 col-lg-8 col-xl-8 mt-5">
+            <div class="card text-center">
+                <div class="card-header bg-info text-light">
+                    <strong>Seasonal-Jobs.com</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Seasonal Jobs is a platform, which brings Help-Seekers and Help-Providers together. Here the Help-Seekers are the Job-Providers and Help-Providers are Job-Seekers. This platform is more helpful for the common people who wants to earn money by doing part-time jobs those who want to live on their own by reducing burden on their parents.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+        window.location.hash=""
+    
+    }
+    
+    if (localStorage.getItem("Authorization")) {
+        let user = JSON.parse(localStorage.getItem('user'))
+        document.getElementById("navOne").style.display = "none";
+        document.getElementById("mainContainer").innerHTML = "";
+        if (user.role == "Job-Seeker") {
+            document.getElementById("navTwo").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementById("jobCount").innerHTML = `Jobs Completed ${user.totalAccepted}`
+            document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to view all types of Jobs and search according to your interest and location. We believe that you will be making use of this platform for a better cause. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
+            document.getElementById("loading").style.display = "none";
+        }
+        if (user.role == "Job-Provider") {
+            document.getElementById("navThree").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementById("countPostedJobs").innerHTML = `Jobs Posted  ${user.totalPosted}`
+            document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to post jobs and update,delete jobs. We believe that you will be making use of this platform for a better cause.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loading").style.display = "none"
+        }
+    
+        if (user.role == "Admin") {
+            document.getElementById("navFour").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[2].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementsByClassName("userName")[2].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center ">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, Admin Welcome Back</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to control and manage Job-Providers, Job-Seekers and Jobs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loading").style.display = "none"
+        }
+        window.location.hash="home"
+    }
 }
 
-if (localStorage.getItem("Authorization")) {
-    let user = JSON.parse(localStorage.getItem('user'))
-    document.getElementById("navOne").style.display = "none";
-    document.getElementById("mainContainer").innerHTML = "";
-    if (user.role == "Job-Seeker") {
-        document.getElementById("navTwo").style.display = "block";
-        if (user.profilePicture) {
-            document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
-        }
-        document.getElementById("jobCount").innerHTML = `Jobs Completed ${user.totalAccepted}`
-        document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
-        const card = document.createElement('div')
-        card.innerHTML = `    
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
-                <div class="card text-center">
-                    <div class="card-header bg-info text-light">
-                        <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Please use above links to view all types of Jobs and search according to your interest and location. We believe that you will be making use of this platform for a better cause. </p>
-                    </div>
-                </div>
-            </div>
-        </div>`
-        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
-        document.getElementById("loading").style.display = "none";
-    }
-    if (user.role == "Job-Provider") {
-        document.getElementById("navThree").style.display = "block";
-        if (user.profilePicture) {
-            document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
-        }
-        document.getElementById("countPostedJobs").innerHTML = `Jobs Posted  ${user.totalPosted}`
-        document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
-        const card = document.createElement('div')
-        card.innerHTML = `    
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
-                <div class="card text-center">
-                    <div class="card-header bg-info text-light">
-                        <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Please use above links to post jobs and update,delete jobs. We believe that you will be making use of this platform for a better cause.</p>
-                    </div>
-                </div>
-            </div>
-        </div>`
-        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-        document.getElementById("loading").style.display = "none"
-    }
-
-    if (user.role == "Admin") {
-        document.getElementById("navFour").style.display = "block";
-        if (user.profilePicture) {
-            document.getElementsByClassName("userPic")[2].setAttribute("src", `${user.profilePicture}`)
-        }
-        document.getElementsByClassName("userName")[2].innerText = `Hi, ${user.name}`;
-        const card = document.createElement('div')
-        card.innerHTML = `    
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
-                <div class="card text-center ">
-                    <div class="card-header bg-info text-light">
-                        <strong>Hi, Admin Welcome Back</strong>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Please use above links to control and manage Job-Providers, Job-Seekers and Jobs</p>
-                    </div>
-                </div>
-            </div>
-        </div>`
-        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-        document.getElementById("loading").style.display = "none"
-    }
-    window.location.hash="home"
-}
+homePage()
 
 
 function messagePopupToggle() {
