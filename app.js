@@ -8,6 +8,7 @@ if (localStorage.getItem("Authorization")) {
     let user = JSON.parse(localStorage.getItem('user'))
     document.getElementById("navOne").style.display = "none";
     document.getElementById("mainContainer").innerHTML = "";
+    window.location.hash="home"
     if (user.role == "Job-Seeker") {
         document.getElementById("navTwo").style.display = "block";
         if (user.profilePicture) {
@@ -177,7 +178,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             messagePopupToggle();
             return;
         }
-
+        window.location.hash="home"
         localStorage.setItem("Authorization", responseJson.jwt)
         localStorage.setItem("user", JSON.stringify(responseJson.user))
         document.getElementById("navOne").style.display = "none";
@@ -355,11 +356,13 @@ function jobsCards(responseJson) {
 
 function allJobs(pageNumber) {
     document.getElementById("loading").style.display = "block"
+    window.location.hash=`all-jobs/page-number=${pageNumber}`
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/allavailablejobs/${pageNumber}/`)
         .then(response => response.json())
         .then(responseJson => {
             document.getElementById("loading").style.display = "none"
             jobsCards(responseJson)
+            
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
@@ -379,6 +382,7 @@ function allJobs(pageNumber) {
 
 function queryJobs(queryKey, queryValue, pageNumber) {
     document.getElementById("loading").style.display = "block"
+    window.location.hash=`jobs/page-number=${pageNumber}?${queryKey}=${queryValue}`
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/filter/${pageNumber}?${queryKey}=${queryValue}`)
         .then(response => response.json())
         .then(responseJson => {
@@ -422,6 +426,7 @@ document.getElementById('keyword').addEventListener('submit', async (event) => {
 
 function viewJob(jobid) {
     document.getElementById("loading").style.display = "block"
+    window.location.hash=`view-job/${jobid}`
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}`,
         {
             method: "GET",
@@ -519,6 +524,7 @@ function applyJob(jobid) {
 function acceptedJobs(pageNumber) {
 
     document.getElementById("loading").style.display = "block";
+    window.location.hash=`accepted-jobs/page-number=${pageNumber}`
     console.log((localStorage.getItem('Authorization')))
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/jobsacceptedtilldate/${pageNumber}`, {
         method: "GET",
@@ -582,10 +588,9 @@ function acceptedJobs(pageNumber) {
 }
 
 function logoutSubmit() {
+    window.location.hash=`logout`
     document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
-    console.log(user)
-    console.log(localStorage.getItem('Authorization'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
     if (user.role == "Admin") var User = "admin"
@@ -631,6 +636,7 @@ function back() {
 }
 
 function profileEdit() {
+    window.location.hash=`profile-edit`
     let user = JSON.parse(localStorage.getItem('user'))
     document.getElementById('mainContainer').style.display = "none"
     document.getElementById("mainContainer1").style.display = "block"
@@ -839,6 +845,7 @@ function updatePicture() {
 }
 
 function postJob() {
+    window.location.hash=`post-job`
     document.getElementById('mainContainer').style.display = "none"
     document.getElementById("mainContainer1").style.display = "block"
     document.getElementById("mainContainer1").innerHTML = `<div class="text-left">
@@ -955,6 +962,7 @@ function postJob() {
 }
 
 function updateJob(jobid) {
+    window.location.hash=`update-job`
     let jobs = JSON.parse(localStorage.getItem('toUpdateJob'))
     const job = jobs.filter(element => {
         return element._id == jobid
@@ -1135,6 +1143,7 @@ function postJobSubmit() {
 }
 
 function postedJobs(pageNumber) {
+    window.location.hash=`posted-jobs`
     document.getElementById("loading").style.display = "block";
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobprovider/jobspostedtilldate/${pageNumber}`, {
         method: "GET",
@@ -1295,6 +1304,7 @@ function deleteJob(jobid) {
 }
 
 function adminAllJobs(pageNumber) {
+    window.location.hash=`all-jobs/page-number=${pageNumber}`
     document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allavailablejobs/${pageNumber}`, {
         method: "GET",
@@ -1356,7 +1366,7 @@ function adminAllJobs(pageNumber) {
 }
 
 function adminAllAcceptedJobs(pageNumber) {
-
+    window.location.hash=`all-accepted-jobs/page-number=${pageNumber}`
     document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allacceptedjobs/${pageNumber}`, {
         method: "GET",
@@ -1415,6 +1425,7 @@ function adminAllAcceptedJobs(pageNumber) {
 
 function adminAllProviders(pageNumber) {
     document.getElementById("loading").style.display = "block"
+    window.location.hash=`all-job-providers/page-number=${pageNumber}`
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allproviders/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1472,6 +1483,7 @@ function adminAllProviders(pageNumber) {
 
 function adminAllSeekers(pageNumber) {
     document.getElementById("loading").style.display = "block"
+    window.location.hash=`all-job-seekers/page-number=${pageNumber}`
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allseekers/${pageNumber}`, {
         method: "GET",
         headers: {
