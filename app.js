@@ -580,6 +580,8 @@ function acceptedJobs(pageNumber) {
 function logoutSubmit() {
     document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
+    console.log(user)
+    console.log(user.role)
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
     if (user.role == "Admin") var User = "admin"
@@ -603,6 +605,7 @@ function logoutSubmit() {
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
             localStorage.removeItem('Authorization')
+            localStorage.removeItem('user')
             setTimeout(() => {
                 location.reload()
             }, 2000)
