@@ -614,12 +614,11 @@ function logoutSubmit() {
                 location.reload()
             }, 2000)
         }).catch(error => {
-            document.getElementById("loading").style.display = "none"
-            document.getElementById("navTwo").style.display = "none"
-            document.getElementById("navThree").style.display = "none"
-            document.getElementById("navFour").style.display = "none"
-            document.getElementById("navOne").style.display = "block"
-            document.getElementById("welcome").style.display = "block"
+            localStorage.removeItem('Authorization')
+            localStorage.removeItem('user')
+            setTimeout(() => {
+                location.reload()
+            }, 2000)
             alert(error.message)
             console.log(error)
         })
