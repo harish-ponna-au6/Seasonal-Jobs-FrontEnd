@@ -326,7 +326,7 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
 function jobsCards(responseJson) {
     document.getElementById("mainContainer1").innerHTML = ''
     document.getElementById("mainContainer").style.display = "block"
-  
+
 
     document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
     responseJson.jobs.forEach(job => {
@@ -383,10 +383,10 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         .then(response => response.json())
         .then(responseJson => {
             document.getElementById("loading").style.display = "none"
-            if (responseJson.count == 0) { 
+            if (responseJson.count == 0) {
                 document.getElementById("mainContainer").innerHTML = `<h3 class="text-center mt-5">No Jobs Found</h3>`
                 return
-             }
+            }
             jobsCards(responseJson)
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
@@ -574,6 +574,10 @@ function acceptedJobs(pageNumber) {
             }
             document.getElementById("loading").style.display = "none"
             document.getElementById("jobCount").innerHTML = `Jobs Completed ${responseJson.count}`
+        }).catch(error => {
+            document.getElementById("loading").style.display = "none"
+            alert(error.message)
+            console.log(error)
         })
 }
 
@@ -609,6 +613,15 @@ function logoutSubmit() {
             setTimeout(() => {
                 location.reload()
             }, 2000)
+        }).catch(error => {
+            document.getElementById("loading").style.display = "none"
+            document.getElementById("navTwo").style.display = "none"
+            document.getElementById("navThree").style.display = "none"
+            document.getElementById("navFour").style.display = "none"
+            document.getElementById("navOne").style.display = "block"
+            document.getElementById("welcome").style.display = "block"
+            alert(error.message)
+            console.log(error)
         })
 
 }
