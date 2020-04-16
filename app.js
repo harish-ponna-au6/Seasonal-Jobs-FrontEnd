@@ -1,16 +1,22 @@
-if(localStorage.getItem("Authorization")){
+if (!localStorage.getItem("Authorization")) {
+    document.getElementById("navOne").style.display = "block"
+    document.getElementById("welcome").style.display = "block"
+
+}
+
+if (localStorage.getItem("Authorization")) {
     let user = JSON.parse(localStorage.getItem('user'))
     document.getElementById("navOne").style.display = "none";
-        document.getElementById("mainContainer").innerHTML = "";
-        if (user.role == "Job-Seeker") {
-            document.getElementById("navTwo").style.display = "block";
-            if (user.profilePicture) {
-                document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
-            }
-            document.getElementById("jobCount").innerHTML = `Jobs Completed ${user.totalAccepted}`
-            document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
-            const card = document.createElement('div')
-            card.innerHTML = `    
+    document.getElementById("mainContainer").innerHTML = "";
+    if (user.role == "Job-Seeker") {
+        document.getElementById("navTwo").style.display = "block";
+        if (user.profilePicture) {
+            document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
+        }
+        document.getElementById("jobCount").innerHTML = `Jobs Completed ${user.totalAccepted}`
+        document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
+        const card = document.createElement('div')
+        card.innerHTML = `    
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
@@ -23,18 +29,18 @@ if(localStorage.getItem("Authorization")){
                 </div>
             </div>
         </div>`
-            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
-            document.getElementById("loading").style.display = "none";
+        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
+        document.getElementById("loading").style.display = "none";
+    }
+    if (user.role == "Job-Provider") {
+        document.getElementById("navThree").style.display = "block";
+        if (user.profilePicture) {
+            document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
         }
-        if (user.role == "Job-Provider") {
-            document.getElementById("navThree").style.display = "block";
-            if (user.profilePicture) {
-                document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
-            }
-            document.getElementById("countPostedJobs").innerHTML = `Jobs Posted  ${user.totalPosted}`
-            document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
-            const card = document.createElement('div')
-            card.innerHTML = `    
+        document.getElementById("countPostedJobs").innerHTML = `Jobs Posted  ${user.totalPosted}`
+        document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
+        const card = document.createElement('div')
+        card.innerHTML = `    
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
@@ -47,18 +53,18 @@ if(localStorage.getItem("Authorization")){
                 </div>
             </div>
         </div>`
-            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-            document.getElementById("loading").style.display = "none"
-        }
+        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+        document.getElementById("loading").style.display = "none"
+    }
 
-        if (user.role == "Admin") {
-            document.getElementById("navFour").style.display = "block";
-            if (user.profilePicture) {
-                document.getElementsByClassName("userPic")[2].setAttribute("src", `${user.profilePicture}`)
-            }
-            document.getElementsByClassName("userName")[2].innerText = `Hi, ${user.name}`;
-            const card = document.createElement('div')
-            card.innerHTML = `    
+    if (user.role == "Admin") {
+        document.getElementById("navFour").style.display = "block";
+        if (user.profilePicture) {
+            document.getElementsByClassName("userPic")[2].setAttribute("src", `${user.profilePicture}`)
+        }
+        document.getElementsByClassName("userName")[2].innerText = `Hi, ${user.name}`;
+        const card = document.createElement('div')
+        card.innerHTML = `    
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center ">
@@ -71,10 +77,10 @@ if(localStorage.getItem("Authorization")){
                 </div>
             </div>
         </div>`
-            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-            document.getElementById("loading").style.display = "none"
-        }
-} 
+        document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+        document.getElementById("loading").style.display = "none"
+    }
+}
 
 
 function messagePopupToggle() {
@@ -320,6 +326,8 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
 function jobsCards(responseJson) {
     document.getElementById("mainContainer1").innerHTML = ''
     document.getElementById("mainContainer").style.display = "block"
+  
+
     document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
     responseJson.jobs.forEach(job => {
         document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
@@ -342,6 +350,7 @@ function jobsCards(responseJson) {
         </div>
       </div>`
     });
+
 }
 
 function allJobs(pageNumber) {
@@ -354,7 +363,7 @@ function allJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center ">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -374,15 +383,19 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         .then(response => response.json())
         .then(responseJson => {
             document.getElementById("loading").style.display = "none"
+            if (responseJson.count == 0) { 
+                document.getElementById("mainContainer").innerHTML = `<h3 class="text-center mt-5">No Jobs Found</h3>`
+                return
+             }
             jobsCards(responseJson)
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
-                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='queryJobs("${queryKey},${queryValue},${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='queryJobs("${queryKey}","${queryValue}","${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
         })
         .catch(error => {
@@ -506,6 +519,7 @@ function applyJob(jobid) {
 function acceptedJobs(pageNumber) {
 
     document.getElementById("loading").style.display = "block";
+    console.log((localStorage.getItem('Authorization')))
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/jobsacceptedtilldate/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -552,7 +566,7 @@ function acceptedJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -1168,7 +1182,7 @@ function postedJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -1312,7 +1326,7 @@ function adminAllJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -1370,7 +1384,7 @@ function adminAllAcceptedJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -1427,7 +1441,7 @@ function adminAllProviders(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
@@ -1482,7 +1496,7 @@ function adminAllSeekers(pageNumber) {
                 let pagination = document.createElement("div")
                 document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
                 pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
                 for (let i = 0; i <= (responseJson.count / 10); i++) {
