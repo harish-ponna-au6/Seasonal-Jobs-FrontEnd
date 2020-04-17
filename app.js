@@ -1343,7 +1343,7 @@ function adminAllJobs(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = ""
+            var success = "btn-outline-danger"
             responseJson.jobs.forEach(job => {
                 if (job.isBlocked == true) { isBlocked = "disabled"; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
@@ -1365,7 +1365,7 @@ function adminAllJobs(pageNumber) {
                       <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Description :</b>${job.description}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${job._id} class="btn btn-outline-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${job._id}','Job')">${Block}</button>
+                      <button type="button" id=${job._id} class="btn mt-3 ${success}" ${isBlocked} onclick="adminBlock('${job._id}','Job')">${Block}</button>
                   </div> 
                   </div>
                 </div>
@@ -1465,7 +1465,7 @@ function adminAllProviders(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = ""
+            var success = "btn-outline-danger"
             responseJson.jobProviders.forEach(jobProvider => {
                 if (jobProvider.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
@@ -1482,7 +1482,7 @@ function adminAllProviders(pageNumber) {
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobProvider.role}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${jobProvider._id} class="btn btn-outline-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobProvider._id}','Job-Provider')">${Block}</button>
+                      <button type="button" id=${jobProvider._id} class="btn  mt-3 ${success}" ${isBlocked} onclick="adminBlock('${jobProvider._id}','Job-Provider')">${Block}</button>
                   </div> 
                   </div>
                 </div>
@@ -1524,7 +1524,7 @@ function adminAllSeekers(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = "success"
+            var success = "btn-outline-danger"
             responseJson.jobSeekers.forEach(jobSeeker => {
                 if (jobSeeker.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
@@ -1541,7 +1541,7 @@ function adminAllSeekers(pageNumber) {
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobSeeker.role}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${jobSeeker._id} class="btn btn-outline-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobSeeker._id}','Job-Seeker')">${Block}</button>
+                      <button type="button" id=${jobSeeker._id} class="btn mt-3 ${success}" ${isBlocked} onclick="adminBlock('${jobSeeker._id}','Job-Seeker')">${Block}</button>
                   </div> 
                   </div>
                 </div>
