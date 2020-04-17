@@ -466,7 +466,7 @@ document.getElementById('city1').addEventListener('submit', async (event) => {
 document.getElementById('pincode1').addEventListener('submit', async (event) => {
     try {
         event.preventDefault();
-        queryJobs("pincode1", event.target.pincode.value, "1")
+        queryJobs("pincode", event.target.pincode1.value, "1")
     }
     catch (error) {
         console.log(error)
