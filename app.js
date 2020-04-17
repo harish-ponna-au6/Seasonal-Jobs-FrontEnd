@@ -484,7 +484,7 @@ document.getElementById('keyword1').addEventListener('submit', async (event) => 
 })
 
 function viewJob(jobid) {
-    document.getElementById("loading").style.display = "block"
+    
     if(!localStorage.getItem("Authorization")){
         document.getElementById('message').innerText = `Error: Please Login to view or apply for a Job`
         document.getElementById("message").style.color = `red`;
@@ -494,7 +494,7 @@ function viewJob(jobid) {
         messagePopupToggle()
         return
     }
-
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}`,
         {
             method: "GET",
