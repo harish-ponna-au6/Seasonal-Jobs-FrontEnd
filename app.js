@@ -325,7 +325,7 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
         document.getElementById('message').innerText = `${responseJson.message}`
         document.getElementById("message").style.color = `black`;
         document.getElementById("messageHeader").innerText = `Woohooo...`
-        document.getElementById("messageHeader").style.backgroundColor = `red`
+        document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
         document.getElementById("messageHeader").style.color = `white`
         messagePopupToggle();
     }
