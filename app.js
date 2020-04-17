@@ -28,7 +28,6 @@ function homePage() {
             if (user.profilePicture) {
                 document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
             }
-            document.getElementById("jobCount").innerHTML = `Jobs Completed ${user.totalAccepted}`
             document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
@@ -52,7 +51,6 @@ function homePage() {
             if (user.profilePicture) {
                 document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
             }
-            document.getElementById("countPostedJobs").innerHTML = `Jobs Posted`
             document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
@@ -206,7 +204,6 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             if (responseJson.user.profilePicture) {
                 document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.user.profilePicture}`)
             }
-            document.getElementById("jobCount").innerHTML = `Jobs Completed`
             document.getElementsByClassName("userName")[0].innerText = `Hi, ${responseJson.user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
@@ -230,7 +227,6 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             if (responseJson.user.profilePicture) {
                 document.getElementsByClassName("userPic")[1].setAttribute("src", `${responseJson.user.profilePicture}`)
             }
-            document.getElementById("countPostedJobs").innerHTML = `Jobs Posted`
             document.getElementsByClassName("userName")[1].innerText = `Hi, ${responseJson.user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
@@ -646,7 +642,6 @@ function acceptedJobs(pageNumber) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
             document.getElementById("loading").style.display = "none"
-            document.getElementById("jobCount").innerHTML = `Jobs Completed`
             window.location.hash = `accepted-jobs/page-number=${pageNumber}`
         }).catch(error => {
             document.getElementById("loading").style.display = "none"
