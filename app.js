@@ -485,6 +485,14 @@ document.getElementById('keyword1').addEventListener('submit', async (event) => 
 
 function viewJob(jobid) {
     document.getElementById("loading").style.display = "block"
+    if(!localStorage.getItem("Authorization")){
+        document.getElementById('message').innerText = `Error: Please Login to view or apply for a Job`
+        document.getElementById("message").style.color = `red`;
+        document.getElementById("messageHeader").innerText = `Ooops...`
+        document.getElementById("messageHeader").style.backgroundColor = `red`
+        document.getElementById("messageHeader").style.color = `white`
+        messagePopupToggle()
+    }
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}`,
         {
