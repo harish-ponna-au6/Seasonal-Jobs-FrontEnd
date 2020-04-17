@@ -148,7 +148,7 @@ document.getElementById("forgotPasswordSubmit").addEventListener("submit", async
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }
@@ -528,7 +528,7 @@ function applyJob(jobid) {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
@@ -629,7 +629,7 @@ function logoutSubmit() {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
             localStorage.removeItem('Authorization')
@@ -792,7 +792,7 @@ function updateProfile() {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             let user = responseJson.user
             messagePopupToggle();
@@ -826,7 +826,7 @@ function updatePassword() {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
@@ -858,7 +858,7 @@ function updatePicture() {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
@@ -1154,7 +1154,7 @@ function postJobSubmit() {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         })
@@ -1292,7 +1292,7 @@ function updateJobSubmit(jobid) {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
@@ -1317,7 +1317,7 @@ function deleteJob(jobid) {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
@@ -1586,7 +1586,7 @@ function adminBlock(id, model) {
             document.getElementById('message').innerText = `${responseJson.message}`
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
-            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
