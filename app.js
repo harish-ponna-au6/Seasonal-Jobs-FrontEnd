@@ -492,6 +492,7 @@ function viewJob(jobid) {
         document.getElementById("messageHeader").style.backgroundColor = `red`
         document.getElementById("messageHeader").style.color = `white`
         messagePopupToggle()
+        return
     }
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}`,
