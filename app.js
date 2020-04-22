@@ -396,14 +396,14 @@ function allJobs(pageNumber) {
 function queryJobs(queryKey, queryValue, pageNumber) {
     document.getElementById("loading").style.display = "block"
     if(localStorage.getItem("Authorization")) {
-        city = "city1";
-        pincode="pincode1";
-        keyword="keyword1"
+        city = "city9";
+        pincode="pincode9";
+        keyword="keyword9"
     }
     else{
-        city = "city";
-        pincode="pincode";
-        keyword="keyword"
+        city = "city8";
+        pincode="pincode8";
+        keyword="keyword8"
     }
     if(queryKey==`${city}`){
         console.log(document.getElementById(`${city}`))
