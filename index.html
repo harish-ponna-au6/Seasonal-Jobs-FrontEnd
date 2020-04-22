@@ -1,33 +1,88 @@
 <!doctype html>
 <html lang="en">
-
-<head>
+  <head>
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
-        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="./style.css">
-    <title>Seasonal Jobs</title>
-</head>
 
-<body style="background-color: rgb(191, 229, 246);">
-    <!-- -----------------Nav Bar 1------------- -->
-    <nav id="navOne" class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(104, 201, 246); ">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
+    <title>Seasonal-Jobs</title>
+  </head>
+  <body style="background:linear-gradient(to right, #c9d6ff, #e2e2e2);">
+        <!-- -----------------Nav Bar 1------------- -->
+    <nav id="navOne"  class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8;display: none; ">
+        
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
 
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a style="color:white" class="navbar-brand" onclick="homePage()" href="#">Seasonal Jobs</a>
+                </li>
+                <li class="nav-item active">
+                    <a style="color:white" id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <b>Category</b>   
+                    </a>
+                    <div id="category" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a id="Hourly" onclick='queryJobs("category","Hourly","1")' class="dropdown-item"
+                            href="#">Hourly</a>
+                        <a id="Daily" onclick='queryJobs("category","Daily","1")' class="dropdown-item"
+                            href="#">Daily</a>
+                        <a id="Weekly" onclick='queryJobs("category","Weekly","1")' class="dropdown-item"
+                            href="#">Weekly</a>
+                        <a id="Monthly" onclick='queryJobs("category","Monthly","1")' class="dropdown-item"
+                            href="#">Monthly</a>
+                    </div>
+                </li>
+                <li class="nav-item dropdown">
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <b>Preference</b>
+                    </a>
+                    <div id="preference" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a id="Male" onclick='queryJobs("preference","Male","1")' class="dropdown-item"
+                            href="#">Male</a>
+                        <a id="Female" onclick='queryJobs("preference","Female","1")' class="dropdown-item"
+                            href="#">Female</a>
+                        <a id="Transgender" onclick='queryJobs("preference","Transgender","1")' class="dropdown-item"
+                            href="#">Transgender</a>
+                        <a id="Any" onclick='queryJobs("preference","Any","1")' class="dropdown-item" href="#">Any</a>
+                    </div>
+                </li>
+                <li>
+                    <form id="city" class="form-inline my-2 my-lg-0">
+                        <input name="city" class="form-control mr-sm-2" style="height: 35px;width: 150px;"type="search" placeholder="Search By City"
+                            aria-label="Search">
+                    </form>
+                </li>
+                <li>
+                    <form id="pincode" class="form-inline my-2 my-lg-0">
+                        <input name="pincode" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Pincode"
+                            aria-label="Search">
+                    </form>
+                </li>
+                <li>
+                    <form id="keyword" class="form-inline my-2 my-lg-0">
+                        <input name="keyword" class="form-control mr-sm-2" style="height: 35px;width: 180px;" type="search" placeholder="Search By Keyword"
+                            aria-label="Search">
+                    </form>
+                </li>
+            </ul>
             <div class="ml-auto">
+
                 <!-- -------------------Login Form---------------- -->
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalCenter">
                     Login
                 </button>
 
@@ -56,31 +111,28 @@
                                         <input type="password" name="password" class="form-control"
                                             id="exampleInputPassword1" placeholder="Password">
                                     </div>
-                                    <div class="text-center mb-5">
                                         <div class="form-group ">
                                             <label for="exampleInputEmail1">Role</label><br>
-                                            <select name="role" id="">
+                                            <select class="form-control" name="role" id="">
                                                 <option selected disabled value="">Select Role</option>
                                                 <option value="Admin">Admin</option>
                                                 <option value="Job-Provider">Job-Provider</option>
                                                 <option value="Job-Seeker">Job-Seeker</option>
                                             </select>
-
-                                        </div>
                                     </div>
 
                                     <div class="form-check">
                                     </div>
-                                    <div class="text-center"><button type="button" class="btn btn-danger "
+                                    <div class="text-center"><button type="button" class="btn btn-outline-danger "
                                             id="loginClose" data-dismiss="modal">Cancel</button>
-                                        <button type="submit" class="btn btn-success">Login</button><br><br></div>
+                                        <button type="submit" class="btn btn-outline-info">Login</button><br><br></div>
 
                                 </form>
 
                                 <!-- ----------------Forgot Password Form- -->
                                 <!-- Button trigger modal -->
                                 <div class="text-center mt-4 ">
-                                    <button type="button" class="btn btn-primary" data-toggle="modal"
+                                    <button type="button" class="btn btn-outline-info" data-toggle="modal"
                                         data-target="#exampleModal">
                                         Forgot Password?
                                     </button>
@@ -114,22 +166,22 @@
                                                             id="exampleInputEmail1" aria-describedby="emailHelp"
                                                             placeholder="Aadhaar Number">
                                                     </div>
-                                                   <div class="text-center"> <div class="form-group mb-4">
+                                                    <div class="form-group mb-4">
                                                     <label for="exampleInputEmail1">Role</label><br>
-                                                    <select name="role" id="">
+                                                    <select class= "form-control" name="role" id="">
                                                         <option selected disabled value="">Select Role</option>
                                                         <option value="Job-Provider">Job-Provider</option>
                                                         <option value="Job-Seeker">Job-Seeker</option>
                                                     </select>
 
-                                                </div></div>
+                                                </div>
                                                     <div class="form-check mb-4">
                                                     </div>
                                                     <div class="text-center mt-5"><button type="button"
-                                                            class="btn btn-danger mb-4 " id="forgotPasswordClose"
+                                                            class="btn btn-outline-danger mb-4 " id="forgotPasswordClose"
                                                             data-dismiss="modal">Close</button>
                                                         <button type="submit"
-                                                            class="btn btn-success mb-4">Submit</button></div>
+                                                            class="btn btn-outline-info mb-4">Submit</button></div>
 
                                                 </form>
                                             </div>
@@ -150,7 +202,7 @@
                 <!-- ---------------Register Form ------------------ -->
 
                 <!-- Button trigger modal -->
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
+                <button type="button" class="btn btn-outline-light" data-toggle="modal" data-target="#exampleModalLong">
                     Register
                 </button>
 
@@ -185,22 +237,22 @@
                                             id="exampleInputEmail1" aria-describedby="emailHelp"
                                             placeholder="aadhaarNumber">
                                     </div>
-                                    <div class="text-center"><div class="form-group">
-                                        <select name="gender" id="">
-                                            <option selected disabled value="">Select Gender</option>
+                                    <div class="form-group">
+                                        <select class="form-control" name="gender" id="">
+                                            <option  selected disabled value="">Select Gender</option>
                                             <option value="Male">Male</option>
                                             <option value="Female">Female</option>
                                             <option value="Transgender">Transgender</option>
                                         </select>
-                                    </div></div>
+                                    </div>
                                     
-                                    <div class="text-center"><div class="form-group ">
-                                        <select name="role" id="">
-                                            <option selected disabled value="">Select Role</option>
+                                    <div class="form-group ">
+                                        <select class="form-control" name="role" id="">
+                                            <option  selected disabled value="">Select Role</option>
                                             <option value="Job-Provider">Job-Provider</option>
                                             <option value="Job-Seeker">Job-Seeker</option>
                                         </select>
-                                    </div></div>
+                                    </div>
                                     
                                     <div class="form-group">
                                         <input type="text" name="contactNumber" class="form-control"
@@ -214,9 +266,9 @@
                                     <div class="form-check mb-4">
                                     </div>
                                     <div class="text-center mt-5">
-                                        <button id="registerClose" type="button" class="btn btn-danger"
+                                        <button id="registerClose" type="button" class="btn btn-outline-danger"
                                         data-dismiss="modal">Close</button>
-                                    <button type="submit" class="btn btn-success ">Register</button>
+                                    <button type="submit" class="btn btn-outline-info ">Register</button>
                                     </div>
                                    
                                 </form>
@@ -238,9 +290,9 @@
         </div>
     </nav>
 
-    <!-- -----------------Nav Bar 2------------- -->
-    <nav id="navTwo" class="navbar navbar-expand-lg navbar-light" style="background-color: rgb(104, 201, 246);display:none">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
+
+    <!-- ------------------------Nav 2--------------- -->
+    <nav id="navTwo" class="navbar navbar-expand-lg navbar-light" style="background-color: #17a2b8; display:none ;">
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
             aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -249,10 +301,13 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
                 <li class="nav-item active">
-                    <a id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
+                    <a style="color:white" class="navbar-brand" onclick="homePage()" href="#">Seasonal Jobs</a>
+                </li>
+                <li class="nav-item active">
+                    <a style="color:white" id="allJobs" onclick='allJobs("1")' class="nav-link" href="#"> <b>All Jobs</b> </a>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>Category</b>   
                     </a>
@@ -268,7 +323,7 @@
                     </div>
                 </li>
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                    <a style="color:white" class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
                         data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <b>Preference</b>
                     </a>
@@ -283,194 +338,150 @@
                     </div>
                 </li>
                 <li>
-                    <form id="city" class="form-inline my-2 my-lg-0">
-                        <input name="city" class="form-control mr-sm-2" type="search" placeholder="Search By City"
+                    <form id="city1" class="form-inline my-2 my-lg-0">
+                        <input name="city1" class="form-control mr-sm-2" style="height: 35px;width: 150px;"type="search" placeholder="Search By City"
                             aria-label="Search">
                     </form>
                 </li>
                 <li>
-                    <form id="pincode" class="form-inline my-2 my-lg-0">
-                        <input name="pincode" class="form-control mr-sm-2" type="search" placeholder="Search By Pincode"
+                    <form id="pincode1" class="form-inline my-2 my-lg-0">
+                        <input name="pincode1" class="form-control mr-sm-2" style="height: 35px;width: 170px;" type="search" placeholder="Search By Pincode"
                             aria-label="Search">
                     </form>
                 </li>
                 <li>
-                    <form id="keyword" class="form-inline my-2 my-lg-0">
-                        <input name="keyword" class="form-control mr-sm-2" type="search" placeholder="Search By Keyword"
+                    <form id="keyword1" class="form-inline my-2 my-lg-0">
+                        <input name="keyword1" class="form-control mr-sm-2" style="height: 35px;width: 175px;" type="search" placeholder="Search By Keyword"
                             aria-label="Search">
                     </form>
                 </li>
             </ul>
-            <a onclick="acceptedJobs()" style="text-decoration: none;" href="#"><div id ="jobCount" style="margin-right: 10px; margin-left:20px; font-size: 1rem; color:white;"></div></a>
+            <a style="text-decoration: none; ;"onclick="acceptedJobs('1')"  href="#"><div id ="jobCount" style="margin-right: 10px; font-size: 1rem; color:white;">Jobs Accepted</div></a>
             <img class="userPic"
                 src="./images.png"
                 alt="" height=40px width=40px style="border-radius: 50%;">
             <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 10px; margin-left:10px; font-size: 1rem; color:white;"></div></a>
-            <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
+            <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
                 aria-pressed="false" autocomplete="off">
                 Logout
             </button>
         </div>
-    </nav>
+</nav>
     <!-- -----------------Nav Bar 3 ------------- -->
-    <nav id="navThree" class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(104, 201, 246);display:none">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
+<nav id="navThree" class="navbar navbar-expand-lg navbar-light " style="background-color: #17a2b8;display: none">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="postJob()">Post Job</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" onclick="postedJobs('1')">Posted Jobs</a>
-                </li>
-            </ul>
-            <img class="userPic"
-            src="./images.png"
-                alt="imgg" height=40px width=40px style="border-radius: 50%;">
-                <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
-            <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
-                aria-pressed="false" autocomplete="off">
-                Logout
-            </button>
-        </div>
-    </nav>
-    <!-- -----------------Nav Bar 4 ------------- -->
-    <nav id="navFour" class="navbar navbar-expand-lg navbar-light " style="background-color: rgb(104, 201, 246);display:none">
-        <a class="navbar-brand" href="#">Seasonal Jobs</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-            aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a style="color:white" class="navbar-brand" onclick="homePage()" href="#">Seasonal Jobs</a>
+            </li>
+           
+            <li class="nav-item">
+                <a style="color:white" class="nav-link" href="#" onclick="postJob()">Post Job</a>
+            </li>
+          
+        </ul>
+        <a style="color:white;text-decoration: none;"  class="nav-link"  href="#" onclick="postedJobs('1')"><div  id="countPostedJobs">Jobs Posted</div></a>
+        <img class="userPic"
+        src="./images.png"
+            alt="imgg" height=40px width=40px style="border-radius: 50%;margin-right: 10px;">
+            <a onclick="profileEdit()" style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px;  font-size: 1rem; color:white;"></div></a>
+        <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
+            aria-pressed="false" autocomplete="off">
+            Logout
         </button>
+    </div>
+</nav>
+ <!-- -----------------Nav Bar 4 ------------- -->
+ <nav id="navFour" class="navbar navbar-expand-lg navbar-light " style="background-color: #17a2b8;display:none">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
+        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
 
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-                <li class="nav-item active">
-                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="adminAllJobs('1')" href="#">All Jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="adminAllAcceptedJobs('1')" href="#">Completed Jobs</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="adminAllProviders('1')" href="#">All Job Providers</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" onclick="adminAllSeekers('1')" href="#">All Job Seekers</a>
-                </li>
-            </ul>
-            <img class="userPic" src="./images.png" height=40px width=40px style="border-radius: 50%;">
-                <a  style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
-            <button type="button" class="btn btn-primary" onclick="logoutSubmit()" data-toggle="button"
-                aria-pressed="false" autocomplete="off">
-                Logout
-            </button>
-        </div>
-    </nav>
-    
-    <!-- ----------------------------------Main Container------------------ -->
-    <div id="mainContainer" class="">
-        <!-- -------------------------welcome message------------------- -->
-        <div class="row d-flex justify-content-center mt-5">
-            <div class="col-11 col-sm-11 col-md-8 col-lg-8 col-xl-8 mt-5">
-                <div class="card text-center">
-                    <div class="card-header bg-info">
-                        <strong>Seasonal-Jobs.com</strong>
-                    </div>
-                    <div class="card-body">
-                        <p class="card-text">Seasonal Jobs is a platform, which brings Help-Seekers and Help-Providers together. Here the Help-Seekers are the Job-Providers and Help-Providers are Job-Seekers. This platform is more helpful for the common people who wants to earn money by doing part-time jobs those who want to live on their own by reducing burden on their parents.</p>
-                    </div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a style="color:white" class="navbar-brand" onclick="homePage()" href="#">Seasonal Jobs</a>
+            </li>
+            <li class="nav-item active">
+                <a style="color:white" class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+            </li>
+            <li class="nav-item">
+                <a style="color:white" class="nav-link" onclick="adminAllJobs('1')" href="#">All Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a style="color:white" class="nav-link" onclick="adminAllAcceptedJobs('1')" href="#">Completed Jobs</a>
+            </li>
+            <li class="nav-item">
+                <a style="color:white" class="nav-link" onclick="adminAllProviders('1')" href="#">All Job Providers</a>
+            </li>
+            <li  class="nav-item">
+                <a style="color:white" class="nav-link" onclick="adminAllSeekers('1')" href="#">All Job Seekers</a>
+            </li>
+        </ul>
+        <img class="userPic" src="./images.png" height=40px width=40px style="border-radius: 50%;">
+            <a  style="text-decoration: none;" href="#"><div class="userName" style="margin-right: 20px; margin-left:20px; font-size: 1.1rem; color:white;"></div></a>
+        <button type="button" class="btn btn-outline-light" onclick="logoutSubmit()" data-toggle="button"
+            aria-pressed="false" autocomplete="off">
+            Logout
+        </button>
+    </div>
+</nav>
+
+<!-- ----------------------------------Main Container------------------ -->
+<div id="mainContainer" class="">
+    <!-- -------------------------welcome message------------------- -->
+    <div id="welcome" style="display: none;"class="row d-flex justify-content-center mt-5">
+        <div class="col-11 col-sm-11 col-md-8 col-lg-8 col-xl-8 mt-5">
+            <div class="card text-center">
+                <div class="card-header bg-info text-light">
+                    <strong>Seasonal-Jobs.com</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Seasonal Jobs is a platform, which brings Help-Seekers and Help-Providers together. Here the Help-Seekers are the Job-Providers and Help-Providers are Job-Seekers. This platform is more helpful for the common people who wants to earn money by doing part-time jobs those who want to live on their own by reducing burden on their parents.</p>
                 </div>
             </div>
         </div>
     </div>
+</div>
 <!-- ------------------Main Container 1 -->
 <div id="mainContainer1" style="display: none;">
 
 </div>
- <!-- ----------------------message popup-------------------- -->
- <div id="messagePopup" class="row d-flex justify-content-center">
-    <div class="col-12">
+<!-- ----------------------message popup-------------------- -->
+<div id="messagePopup" class="row d-flex justify-content-center">
+<div class="col-12">
+</div>
+<div class="card text-center">
+    <div id="messageHeader" class="card-header text-white">
     </div>
-    <div class="card text-center">
-        <div class="card-header bg-success text-white">
-            Woohoo...
-        </div>
-        <div class="card-body">
-            <p id="message" class="card-text"></p>
-            <a href="#" class="btn btn-secondary" onclick="messagePopupToggle()">Close</a>
-        </div>
+    <div class="card-body">
+        <p id="message" class="card-text"></p>
+        <a href="#" class="btn btn-secondary" onclick="messagePopupToggle()">Close</a>
     </div>
+</div>
 </div>
 
 
-   
-    <!-- -------------------Spinner---------->
-    <style>
-        .loader {
-            border: 16px solid #f3f3f3;
-            border-radius: 50%;
-            border-top: 16px solid #3498db;
-            width: 120px;
-            height: 120px;
-            -webkit-animation: spin 2s linear infinite;
-            /* Safari */
-            animation: spin 2s linear infinite;
-        }
 
-        /* Safari */
-        @-webkit-keyframes spin {
-            0% {
-                -webkit-transform: rotate(0deg);
-            }
+<!-- -------------------Spinner---------->
 
-            100% {
-                -webkit-transform: rotate(360deg);
-            }
-        }
-
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-
-            100% {
-                transform: rotate(360deg);
-            }
-        }
-
-        #loader {
-            position: fixed;
-            left: 46%;
-            top: 13rem;
-            display: none;
-        }
-    </style>
-
-    <div id="loader" class="loader"></div>
+<div id="loading" style="position: fixed;top: 50%; left: 50%;transform: translate(-50%,-50%);display:none "class="text-center">
+    <div class="spinner-border" style="width: 4rem;height: 4rem;color:#17a2b8" role="status">
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
 
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-        crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
-        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-        crossorigin="anonymous"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
-        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-        crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
     <script src="./app.js"></script>
-</body>
-
+  </body>
 </html>
-

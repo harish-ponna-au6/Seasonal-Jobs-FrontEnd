@@ -1,3 +1,104 @@
+function homePage() {
+    if (!localStorage.getItem("Authorization")) {
+        document.getElementById("navOne").style.display = "block"
+        document.getElementById("mainContainer").innerHTML = `
+        <div id="welcome" style="display: none;"class="row d-flex justify-content-center mt-5">
+        <div class="col-11 col-sm-11 col-md-8 col-lg-8 col-xl-8 mt-5">
+            <div class="card text-center">
+                <div class="card-header bg-info text-light">
+                    <strong>Seasonal-Jobs.com</strong>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">Seasonal Jobs is a platform, which brings Help-Seekers and Help-Providers together. Here the Help-Seekers are the Job-Providers and Help-Providers are Job-Seekers. This platform is more helpful for the common people who wants to earn money by doing part-time jobs those who want to live on their own by reducing burden on their parents.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>`
+        window.location.hash = ""
+
+    }
+
+    if (localStorage.getItem("Authorization")) {
+        let user = JSON.parse(localStorage.getItem('user'))
+        document.getElementById("navOne").style.display = "none";
+        document.getElementById("mainContainer").innerHTML = "";
+        if (user.role == "Job-Seeker") {
+            document.getElementById("navTwo").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[0].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementsByClassName("userName")[0].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to view all types of Jobs and search according to your interest and location. We believe that you will be making use of this platform for a better cause. </p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
+            document.getElementById("loading").style.display = "none";
+        }
+        if (user.role == "Job-Provider") {
+            document.getElementById("navThree").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[1].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementsByClassName("userName")[1].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, ${user.name}. Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to post jobs and update,delete jobs. We believe that you will be making use of this platform for a better cause.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loading").style.display = "none"
+        }
+
+        if (user.role == "Admin") {
+            document.getElementById("navFour").style.display = "block";
+            if (user.profilePicture) {
+                document.getElementsByClassName("userPic")[2].setAttribute("src", `${user.profilePicture}`)
+            }
+            document.getElementsByClassName("userName")[2].innerText = `Hi, ${user.name}`;
+            const card = document.createElement('div')
+            card.innerHTML = `    
+            <div class="row d-flex justify-content-center mt-5">
+                <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
+                    <div class="card text-center ">
+                        <div class="card-header bg-info text-light">
+                            <strong>Hi, Admin Welcome Back</strong>
+                        </div>
+                        <div class="card-body">
+                            <p class="card-text">Please use above links to control and manage Job-Providers, Job-Seekers and Jobs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>`
+            document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
+            document.getElementById("loading").style.display = "none"
+        }
+        window.location.hash = "home"
+    }
+}
+
+homePage()
+
 
 function messagePopupToggle() {
     document.getElementById("messagePopup").classList.toggle("active")
@@ -14,7 +115,8 @@ document.getElementById("forgotPasswordSubmit").addEventListener("submit", async
             document.getElementById("forgotPasswordError").style.color = "red";
             return
         }
-        document.getElementById("loader").style.display = "block";
+        document.getElementById("forgotPasswordClose").click();
+        document.getElementById("loading").style.display = "block";
         const forgotUser = {
             email: email.value,
             aadhaarNumber: aadhaarNumber.value,
@@ -28,20 +130,29 @@ document.getElementById("forgotPasswordSubmit").addEventListener("submit", async
             body: JSON.stringify(forgotUser)
         });
         const responseJson = await response.json()
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         if (responseJson.error) {
-            document.getElementById("forgotPasswordError").innerText = `Error : ${responseJson.error}`
-            document.getElementById("forgotPasswordError").style.color = `red`;
+            document.getElementById("message").innerText = `Error : ${responseJson.error}`
+            document.getElementById("message").style.color = `red`;
+            document.getElementById("messageHeader").innerText = `Oops...`;
+            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.color = `white`
+            document.getElementById("loading").style.display = "none"
+            messagePopupToggle();
             return;
         }
         else {
-            document.getElementById("forgotPasswordClose").click();
+
             document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }
     }
     catch (error) {
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         alert(error.message)
         console.log(error)
     }
@@ -57,7 +168,8 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             document.getElementById("loginError").style.color = "red";
             return
         }
-        document.getElementById("loader").style.display = "block"
+        document.getElementById("loginClose").click();
+        document.getElementById("loading").style.display = "block"
         const loginUser = {
             email: email.value,
             password: password.value,
@@ -71,14 +183,18 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             body: JSON.stringify(loginUser)
         });
         const responseJson = await response.json()
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         if (responseJson.error) {
-            document.getElementById("loginError").innerText = `Error : ${responseJson.error}`
-            document.getElementById("loginError").style.color = `red`;
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("message").innerText = `Error : ${responseJson.error}`
+            document.getElementById("message").style.color = `red`;
+            document.getElementById("messageHeader").innerText = `Oops...`;
+            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.color = `white`
+            document.getElementById("loading").style.display = "none"
+            messagePopupToggle();
             return;
         }
-        document.getElementById("loginClose").click();
+
         localStorage.setItem("Authorization", responseJson.jwt)
         localStorage.setItem("user", JSON.stringify(responseJson.user))
         document.getElementById("navOne").style.display = "none";
@@ -88,14 +204,13 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             if (responseJson.user.profilePicture) {
                 document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.user.profilePicture}`)
             }
-            document.getElementById("jobCount").innerHTML = `Jobs Completed ${responseJson.user.totalAccepted}`
             document.getElementsByClassName("userName")[0].innerText = `Hi, ${responseJson.user.name}`;
             const card = document.createElement('div')
             card.innerHTML = `    
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
-                    <div class="card-header bg-info">
+                    <div class="card-header bg-info text-light">
                         <strong>Hi, ${responseJson.user.name}. Seasonal-Jobs Welcomes You for Seeking a Part-Time Job</strong>
                     </div>
                     <div class="card-body">
@@ -105,8 +220,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card);
-            document.getElementById("loader").style.display = "none";
-            return;
+            document.getElementById("loading").style.display = "none";
         }
         if (responseJson.user.role == "Job-Provider") {
             document.getElementById("navThree").style.display = "block";
@@ -119,7 +233,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center">
-                    <div class="card-header bg-info">
+                    <div class="card-header bg-info text-light">
                         <strong>Hi, ${responseJson.user.name}. Seasonal-Jobs Welcomes You for Providing a Part-Time Job</strong>
                     </div>
                     <div class="card-body">
@@ -129,8 +243,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-            document.getElementById("loader").style.display = "none"
-            return;
+            document.getElementById("loading").style.display = "none"
         }
 
         if (responseJson.user.role == "Admin") {
@@ -144,7 +257,7 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
         <div class="row d-flex justify-content-center mt-5">
             <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-6 mt-5">
                 <div class="card text-center ">
-                    <div class="card-header bg-info">
+                    <div class="card-header bg-info text-light">
                         <strong>Hi, Admin Welcome Back</strong>
                     </div>
                     <div class="card-body">
@@ -154,13 +267,13 @@ document.getElementById("loginSubmit").addEventListener("submit", async (event) 
             </div>
         </div>`
             document.getElementById("mainContainer").insertAdjacentElement("beforeend", card)
-            document.getElementById("loader").style.display = "none"
-            return;
+            document.getElementById("loading").style.display = "none"
         }
+        window.location.hash = "home"
 
     }
     catch (error) {
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         alert(error.message)
         console.log(error)
     }
@@ -175,7 +288,8 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
             document.getElementById("registerError").style.color = "red";
             return
         }
-        document.getElementById("loader").style.display = "block"
+        document.getElementById("registerClose").click()
+        document.getElementById("loading").style.display = "block"
         const registerUser = {
             email: email.value,
             password: password.value,
@@ -195,19 +309,28 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
             body: JSON.stringify(registerUser)
         });
         const responseJson = await response.json()
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         if (responseJson.error) {
-            document.getElementById("registerError").innerText = `Error : ${responseJson.error}`
-            document.getElementById("registerError").style.color = `red`;
+            document.getElementById("message").innerText = `Error : ${responseJson.error}`
+            document.getElementById("message").style.color = `red`;
+            document.getElementById("messageHeader").innerText = `Oops...`;
+            document.getElementById("messageHeader").style.backgroundColor = `red`
+            document.getElementById("messageHeader").style.color = `white`
+            document.getElementById("loading").style.display = "none"
+            messagePopupToggle();
             return;
         }
 
-        document.getElementById("registerClose").click()
-        document.getElementById("message").innerText = `${responseJson.message}`
+
+        document.getElementById('message').innerText = `${responseJson.message}`
+        document.getElementById("message").style.color = `black`;
+        document.getElementById("messageHeader").innerText = `Woohooo...`
+        document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+        document.getElementById("messageHeader").style.color = `white`
         messagePopupToggle();
     }
     catch (error) {
-        document.getElementById("loader").style.display = "none"
+        document.getElementById("loading").style.display = "none"
         alert(error.message)
         console.log(error)
     }
@@ -216,11 +339,13 @@ document.getElementById("registerSubmit").addEventListener("submit", async (even
 function jobsCards(responseJson) {
     document.getElementById("mainContainer1").innerHTML = ''
     document.getElementById("mainContainer").style.display = "block"
+
+
     document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
     responseJson.jobs.forEach(job => {
         document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
         <div class="card">
-          <div class="card-header bg-info"><b>Title :${job.title}</b></div>
+          <div class="card-header bg-info text-light"><b>Title :${job.title}</b></div>
           <div class="card-body">
             <div class="row">
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
@@ -232,31 +357,35 @@ function jobsCards(responseJson) {
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>PostedAt :</b>${job.updatedAt}</div>
             </div>
             <div class="text-right"> 
-              <button type="button" class="btn btn-primary mt-3 " onclick="viewJob('${job._id}')">View Job</button>
+              <button type="button" class="btn btn-outline-info mt-3 " onclick="viewJob('${job._id}')">View Job</button>
           </div> 
           </div>
         </div>
       </div>`
     });
+
 }
 
 function allJobs(pageNumber) {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
+
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/allavailablejobs/${pageNumber}/`)
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             jobsCards(responseJson)
+
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center ">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `all-jobs/page-number=${pageNumber}`
         })
         .catch(error => {
             alert(error.message)
@@ -265,73 +394,107 @@ function allJobs(pageNumber) {
 }
 
 function queryJobs(queryKey, queryValue, pageNumber) {
-    document.getElementById("loader").style.display = "block"
-    if(localStorage.getItem("Authorization")) {
-        city = "city1";
-        pincode="pincode1";
-        keyword="keyword1"
-    }
-    else{
-        city = "city";
-        pincode="pincode";
-        keyword="keyword"
-    }
-    if(queryKey=="city"){
-        document.getElementById("pincode").value=''
-        document.getElementById("keyword").value=''
-    }
-    else if(queryKey=="pincode"){
-        document.getElementById("city").value=''
-        document.getElementById("keyword").value=''
-    }
-    else if(queryKey=="keyword"){
-        document.getElementById("city").value=''
-        document.getElementById("pincode").value=''
-    }
-    else{
-        document.getElementById("city").value=''
-        document.getElementById("pincode").value=''
-        document.getElementById("keyword").value=''
-    }
+    document.getElementById("loading").style.display = "block"
+
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/filter/${pageNumber}?${queryKey}=${queryValue}`)
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            if (responseJson.count == 0) {
+                document.getElementById("mainContainer").innerHTML = `<h3 class="text-center mt-5">No Jobs Found</h3>`
+                return
+            }
             jobsCards(responseJson)
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
-                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='queryJobs("${queryKey},${queryValue},${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='queryJobs("${queryKey}","${queryValue}","${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
+            window.location.hash = `jobs/page-number=${pageNumber}?${queryKey}=${queryValue}`
         })
         .catch(error => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             alert(error.message)
             console.log(error)
         })
 }
 
 document.getElementById('city').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    queryJobs("city", event.target.city.value, "1")
+    try {
+        event.preventDefault();
+        queryJobs("city", event.target.city.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
 })
 
 document.getElementById('pincode').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    queryJobs("pincode", event.target.pincode.value, "1")
+    try {
+        event.preventDefault();
+        queryJobs("pincode", event.target.pincode.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
 })
 
 document.getElementById('keyword').addEventListener('submit', async (event) => {
-    event.preventDefault();
-    queryJobs("keyword", event.target.keyword.value, "1")
+    try {
+        event.preventDefault();
+        queryJobs("keyword", event.target.keyword.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
+})
+
+document.getElementById('city1').addEventListener('submit', async (event) => {
+    try {
+        event.preventDefault();
+        queryJobs("city", event.target.city1.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
+})
+
+document.getElementById('pincode1').addEventListener('submit', async (event) => {
+    try {
+        event.preventDefault();
+        queryJobs("pincode", event.target.pincode1.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
+})
+
+document.getElementById('keyword1').addEventListener('submit', async (event) => {
+    try {
+        event.preventDefault();
+        queryJobs("keyword", event.target.keyword1.value, "1")
+    }
+    catch (error) {
+        console.log(error)
+    }
 })
 
 function viewJob(jobid) {
-    document.getElementById("loader").style.display = "block"
+    
+    if(!localStorage.getItem("Authorization")){
+        document.getElementById('message').innerText = `Error: Please Login to view or apply for a Job`
+        document.getElementById("message").style.color = `red`;
+        document.getElementById("messageHeader").innerText = `Ooops...`
+        document.getElementById("messageHeader").style.backgroundColor = `red`
+        document.getElementById("messageHeader").style.color = `white`
+        messagePopupToggle()
+        return
+    }
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}`,
         {
             method: "GET",
@@ -342,7 +505,7 @@ function viewJob(jobid) {
         })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none";
+            document.getElementById("loading").style.display = "none";
             document.getElementById("mainContainer").style.display = "none"
             document.getElementById("mainContainer1").style.display = "block"
             document.getElementById("mainContainer1").innerHTML = `
@@ -352,7 +515,7 @@ function viewJob(jobid) {
         <div class="row justify-content-center mt-2 ">
       <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
-          <div class="card-header bg-info"><b>Title :</b>Job-Details</div>
+          <div class="card-header bg-info text-light"><b>Title :</b>Job-Details</div>
           <div class="card-body">
             <div class="row">
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Title :</b>${responseJson.job.title}</div>
@@ -367,14 +530,14 @@ function viewJob(jobid) {
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Address :</b>${responseJson.job.address}</div>
             </div>
             <div class="text-right"> 
-              <button type="button" id="applyJob" class="btn mt-3" style="background-color:#5cb85c;color:white" onclick='applyJob("${responseJson.job._id}")'>Apply Job</button>
+              <button type="button" id="applyJob" class="btn btn-outline-info mt-3"  onclick='applyJob("${responseJson.job._id}")'>Apply Job</button>
           </div> 
           </div>
         </div>
       </div>
       <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2 ">
         <div class="card">
-          <div class="card-header bg-info"><b>Title :</b>Job-Provider-Details</div>
+          <div class="card-header bg-info text-light"><b>Title :</b>Job-Provider-Details</div>
           <div class="card-body">
             <div class="row">
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Name :</b>${responseJson.job.jobProviderName}</div>
@@ -386,17 +549,17 @@ function viewJob(jobid) {
         </div>
       </div>
   </div>`
-
+            window.location.hash = `view-job/${jobid}`
         })
         .catch(error => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             alert(error.message)
             console.log(error)
         })
 }
 
 function applyJob(jobid) {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/byjobid/${jobid}/isaccepted`,
         {
             method: "PATCH",
@@ -407,16 +570,20 @@ function applyJob(jobid) {
         })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return window.alert(`${responseJson.error}`)
             document.getElementById("applyJob").innerText = `Job Applied`
             document.getElementById("applyJob").style.backgroundColor = `red`
             document.getElementById("applyJob").style.color = `white`
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
         .catch(error => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             alert(error.message)
             console.log(error)
         })
@@ -424,7 +591,9 @@ function applyJob(jobid) {
 
 function acceptedJobs(pageNumber) {
 
-    document.getElementById("loader").style.display = "block";
+    document.getElementById("loading").style.display = "block";
+
+    console.log((localStorage.getItem('Authorization')))
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/jobsacceptedtilldate/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -435,19 +604,23 @@ function acceptedJobs(pageNumber) {
         .then(response => response.json())
         .then(responseJson => {
             const jobs = responseJson.jobs;
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
 
-            document.getElementById("loader").style.display = "none";
+            document.getElementById("loading").style.display = "none";
             document.getElementById("mainContainer1").style.display = "none"
             document.getElementById("mainContainer").style.display = "block"
+            if (responseJson.count == 0) {
+                document.getElementById("mainContainer").innerHTML = `<h3 class="text-center">No Jobs Accepted</h3>`
+                return
+            }
             document.getElementById("mainContainer").innerHTML = `
             <div id ="row" class='row justify-content-center mt-3 '></div>`
             jobs.forEach(job => {
                 document.getElementById("row").innerHTML += `
       <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
-          <div class="card-header bg-info"><b>Title :</b>${job.title}</div>
+          <div class="card-header bg-info text-light"><b>Title :</b>${job.title}</div>
           <div class="card-body">
             <div class="row">
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
@@ -471,19 +644,24 @@ function acceptedJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
-            document.getElementById("jobCount").innerHTML = `Jobs Completed ${responseJson.count}`
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `accepted-jobs/page-number=${pageNumber}`
+        }).catch(error => {
+            document.getElementById("loading").style.display = "none"
+            alert(error.message)
+            console.log(error)
         })
 }
 
 function logoutSubmit() {
-    document.getElementById("loader").style.display = "block"
+    window.location.hash = `logout`
+    document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
@@ -498,14 +676,28 @@ function logoutSubmit() {
     })
         .then(response => response.json())
         .then(responseJson => {
-            
-            document.getElementById("loader").style.display = "none"
+
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
+            localStorage.removeItem('Authorization')
+            localStorage.removeItem('user')
             setTimeout(() => {
                 location.reload()
-            }, 3000)
+            }, 2000)
+        }).catch(error => {
+            localStorage.removeItem('Authorization')
+            localStorage.removeItem('user')
+            setTimeout(() => {
+                location.reload()
+            }, 2000)
+            alert(error.message)
+            console.log(error)
         })
 
 }
@@ -516,6 +708,7 @@ function back() {
 }
 
 function profileEdit() {
+
     let user = JSON.parse(localStorage.getItem('user'))
     document.getElementById('mainContainer').style.display = "none"
     document.getElementById("mainContainer1").style.display = "block"
@@ -526,7 +719,7 @@ function profileEdit() {
   <div class="row justify-content-center mt-2 ">
     <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
       <div class="card">
-        <div class="card-header bg-info"><b>Edit Your Profile</b></div>
+        <div class="card-header bg-info text-light"><b>Edit Your Profile</b></div>
         <div class="card-body">
           <form id="formUpdateProfile">
             <div class="form-group">
@@ -567,8 +760,8 @@ function profileEdit() {
             </div>
         </div>
         <div class="text-center">
-          <button id="updateProfile" type="button" id="applyJob" class="btn mt-2 mb-2 bg-success"
-            style="background-color:green;color:white;" onclick="updateProfile()" >Update
+          <button id="updateProfile" type="button" id="applyJob" class="btn btn-outline-info mt-2 mb-2 "
+             onclick="updateProfile()" >Update
             Profile</button>
         </div>
         </form>
@@ -578,7 +771,7 @@ function profileEdit() {
   <div class="row justify-content-center mt-2 ">
     <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
       <div class="card">
-        <div class="card-header bg-info"><b>Edit Your Password</b></div>
+        <div class="card-header bg-info text-light"><b>Edit Your Password</b></div>
         <div class="card-body">
           <form id="formUpdatePassword">
             <div class="form-group">
@@ -587,8 +780,8 @@ function profileEdit() {
                 aria-describedby="emailHelp">
             </div>
             <div  class="text-center">
-              <button type="button"  class="btn mt-2 mb-2 bg-success"
-                style="background-color:green;color:white;" onclick='updatePassword()'>Update Password
+              <button type="button"  class="btn btn-outline-info mt-2 mb-2 "
+                 onclick='updatePassword()'>Update Password
               </button>
             </div>
           </form>
@@ -599,7 +792,7 @@ function profileEdit() {
   <div class="row justify-content-center mt-2 ">
     <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
       <div class="card">
-        <div class="card-header bg-info"><b>Upload Your Profile Picture</b></div>
+        <div class="card-header bg-info text-light"><b>Upload Your Profile Picture</b></div>
         <div class="card-body">
           <form id="formUpdatePicture">
             <div class="form-group">
@@ -608,19 +801,20 @@ function profileEdit() {
                 aria-describedby="emailHelp">
             </div>
             <div class="text-center">
-              <button type="button" id="applyJob" class="btn mt-2 mb-2 bg-success"
-                style="background-color:green;color:white;" onclick="updatePicture()">Update Picture</button>
+              <button type="button" id="applyJob" class="btn btn-outline-info mt-2 mb-2"
+                 onclick="updatePicture()">Update Picture</button>
             </div>
           </form>
         </div>
       </div>
     </div>
   </div>`
+    window.location.hash = `profile-edit`
 }
 
 
 function updateProfile() {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
@@ -635,7 +829,7 @@ function updateProfile() {
         address
     }
 
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/${User}/editprofile`, {
         method: "PATCH",
         headers: {
@@ -646,9 +840,13 @@ function updateProfile() {
     })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             let user = responseJson.user
             messagePopupToggle();
         })
@@ -656,7 +854,7 @@ function updateProfile() {
 
 
 function updatePassword() {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
@@ -665,7 +863,7 @@ function updatePassword() {
         password: `${document.getElementById("updatePasswordd").value}`
     }
 
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/${User}/editpassword`, {
         method: "PATCH",
         headers: {
@@ -676,15 +874,19 @@ function updatePassword() {
     })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
 }
 
 function updatePicture() {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     const user = JSON.parse(localStorage.getItem('user'))
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
@@ -693,7 +895,7 @@ function updatePicture() {
         password: `${document.getElementById("updatePassword").value}`
     }
 
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/${User}/uploadprofilepicture`, {
         method: "PATCH",
         headers: {
@@ -704,14 +906,19 @@ function updatePicture() {
     })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle()
         })
 }
 
 function postJob() {
+
     document.getElementById('mainContainer').style.display = "none"
     document.getElementById("mainContainer1").style.display = "block"
     document.getElementById("mainContainer1").innerHTML = `<div class="text-left">
@@ -721,7 +928,7 @@ function postJob() {
 <div class="row justify-content-center mt-2 ">
     <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
-            <div class="card-header bg-info text-center"><b>Post Your Job</b></div>
+            <div class="card-header bg-info text-light text-center"><b>Post Your Job</b></div>
             <div class="card-body">
             <div id="jobPostError"></div>
                 <form id="formPostJob">
@@ -818,17 +1025,19 @@ function postJob() {
                     </div>
             </div>
             <div class="text-center">
-                <button id="" type="button" id="applyJob" class="btn mt-2 mb-2 bg-success text-white"
+                <button id="" type="button" id="applyJob" class="btn btn-outline-info mt-2 mb-2 "
                      onclick="postJobSubmit()">Post Job</button>
             </div>
             </form>
         </div>
     </div>
 </div>`
+    window.location.hash = `post-job`
 }
 
 function updateJob(jobid) {
-    let jobs =JSON.parse(localStorage.getItem('toUpdateJob'))
+
+    let jobs = JSON.parse(localStorage.getItem('toUpdateJob'))
     const job = jobs.filter(element => {
         return element._id == jobid
     })
@@ -841,7 +1050,7 @@ function updateJob(jobid) {
 <div class="row justify-content-center mt-2 ">
     <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
-            <div class="card-header bg-info text-center"><b>Post Your Job</b></div>
+            <div class="card-header bg-info text-light text-center"><b>Post Your Job</b></div>
             <div class="card-body">
             <div id="jobPostError"></div>
                 <form id="formPostJob">
@@ -936,13 +1145,14 @@ function updateJob(jobid) {
                     </div>
             </div>
             <div class="text-center">
-                <button id="" type="button" id="applyJob" class="btn mt-2 mb-2 bg-success text-white"
+                <button id="" type="button" id="applyJob" class="btn btn-outline-info mt-2 mb-2 "
                      onclick="updateJobSubmit('${job[0]._id}')">Post Job</button>
             </div>
             </form>
         </div>
     </div>
 </div>`
+    window.location.hash = `update-job`
 }
 
 function postJobSubmit() {
@@ -965,7 +1175,7 @@ function postJobSubmit() {
         document.getElementById("jobPostError").style.color = "red";
         return
     }
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     const postJob = {
         title,
         category,
@@ -992,9 +1202,13 @@ function postJobSubmit() {
     })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         })
         .catch(error => {
@@ -1003,8 +1217,9 @@ function postJobSubmit() {
         })
 }
 
-function postedJobs(pageNumber){
-    document.getElementById("loader").style.display = "block";
+function postedJobs(pageNumber) {
+
+    document.getElementById("loading").style.display = "block";
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobprovider/jobspostedtilldate/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1015,13 +1230,17 @@ function postedJobs(pageNumber){
         .then(response => response.json())
         .then(responseJson => {
             const jobs = responseJson.jobs;
-            localStorage.setItem('toUpdateJob',JSON.stringify(jobs))
-            document.getElementById("loader").style.display = "none"
+            localStorage.setItem('toUpdateJob', JSON.stringify(jobs))
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
 
-            document.getElementById("loader").style.display = "none";
+            document.getElementById("loading").style.display = "none";
             document.getElementById("mainContainer1").style.display = "none"
             document.getElementById("mainContainer").style.display = "block"
+            if (responseJson.count == 0) {
+                document.getElementById("mainContainer").innerHTML = `<h3 class="text-center">No Jobs Posted</h3>`
+                return
+            }
             document.getElementById("mainContainer").innerHTML = `
             <div id ="row" class='row justify-content-center mt-3 '></div>`
             var hai;
@@ -1036,7 +1255,7 @@ function postedJobs(pageNumber){
                 document.getElementById("row").innerHTML += `
       <div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-2">
         <div class="card">
-          <div class="card-header bg-info"><b>Title :</b>${job.title}</div>
+          <div class="card-header bg-info text-light"><b>Title :</b>${job.title}</div>
           <div class="card-body">
             <div class="row">
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
@@ -1056,8 +1275,8 @@ function postedJobs(pageNumber){
               <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Job Description :</b>${job.description}</div>
             </div>
             <div class="text-right"> 
-            <button type="button" id="${job._id}" class="btn mt-3 btn-danger ${hai}"  onclick='deleteJob("${job._id}")'>Delete Job</button>
-              <button type="button"  class="btn mt-3 btn-success ${hai}"  onclick='updateJob("${job._id}")'>Update Job</button>
+            <button type="button" id="${job._id}" class="btn mt-3 btn-outline-danger ${hai}"  onclick='deleteJob("${job._id}")'>Delete Job</button>
+              <button type="button"  class="btn mt-3 btn-outline-info ${hai}"  onclick='updateJob("${job._id}")'>Update Job</button>
           </div> 
           </div>
         </div>
@@ -1066,14 +1285,16 @@ function postedJobs(pageNumber){
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
-                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='postedJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `posted-jobs`
         }).catch(error => {
+            document.getElementById("loading").style.display = "none"
             alert(error.message)
             console.log(error)
         })
@@ -1096,7 +1317,7 @@ function updateJobSubmit(jobid) {
     const address = document.getElementById("jobAddress").value
     const keyword = document.getElementById("jobKeyword").value
 
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     const postJob = {
         title,
         category,
@@ -1123,9 +1344,13 @@ function updateJobSubmit(jobid) {
     })
         .then(response => response.json())
         .then(responseJson => {
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
             if (responseJson.error) return alert(`${responseJson.error}`)
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
             alert(error.message)
@@ -1146,7 +1371,11 @@ function deleteJob(jobid) {
         .then(responseJson => {
             if (responseJson.error) return alert(`${responseJson.error}`)
             document.getElementById(`${jobid}`).innerText = `Job Deleted`
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
             alert(error.message)
@@ -1155,7 +1384,8 @@ function deleteJob(jobid) {
 }
 
 function adminAllJobs(pageNumber) {
-    document.getElementById("loader").style.display = "block"
+
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allavailablejobs/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1170,12 +1400,12 @@ function adminAllJobs(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = "success"
+            var success = "btn-outline-danger"
             responseJson.jobs.forEach(job => {
-                if (job.isBlocked == true) { isBlocked = "disabled"; Block = "Blocked"; success = "danger" }
+                if (job.isBlocked == true) { isBlocked = "disabled"; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
                 <div class="card">
-                  <div class="card-header bg-info"><b>Title :${job.title}</b></div>
+                  <div class="card-header bg-info text-light"><b>Title :${job.title}</b></div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
@@ -1192,7 +1422,7 @@ function adminAllJobs(pageNumber) {
                       <div class="col-12 col-sm-12 col-md-12 col-lg-12 col-xl-12"><b>Description :</b>${job.description}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${job._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${job._id}','Job')">${Block}</button>
+                      <button type="button" id=${job._id} class="btn mt-3 ${success}" ${isBlocked} onclick="adminBlock('${job._id}','Job')">${Block}</button>
                   </div> 
                   </div>
                 </div>
@@ -1201,13 +1431,14 @@ function adminAllJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `all-jobs/page-number=${pageNumber}`
 
         }).catch(error => {
             alert(error.message)
@@ -1217,7 +1448,7 @@ function adminAllJobs(pageNumber) {
 
 function adminAllAcceptedJobs(pageNumber) {
 
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allacceptedjobs/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1234,7 +1465,7 @@ function adminAllAcceptedJobs(pageNumber) {
             responseJson.jobs.forEach(job => {
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
                 <div class="card">
-                  <div class="card-header bg-info"><b>Title :${job.title}</b></div>
+                  <div class="card-header bg-info text-light"><b>Title :${job.title}</b></div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Category :</b>${job.category}</div>
@@ -1259,13 +1490,14 @@ function adminAllAcceptedJobs(pageNumber) {
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllAcceptedJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `all-accepted-jobs/page-number=${pageNumber}`
 
         }).catch(error => {
             alert(error.message)
@@ -1274,7 +1506,8 @@ function adminAllAcceptedJobs(pageNumber) {
 }
 
 function adminAllProviders(pageNumber) {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
+
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allproviders/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1289,12 +1522,12 @@ function adminAllProviders(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = "success"
+            var success = "btn-outline-danger"
             responseJson.jobProviders.forEach(jobProvider => {
-                if (jobProvider.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "danger" }
+                if (jobProvider.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
                 <div class="card">
-                  <div class="card-header bg-info"><b>Title :${jobProvider.name}</b></div>
+                  <div class="card-header bg-info text-light"><b>Title :${jobProvider.name}</b></div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Email :</b>${jobProvider.email}</div>
@@ -1306,23 +1539,24 @@ function adminAllProviders(pageNumber) {
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobProvider.role}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${jobProvider._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobProvider._id}','Job-Provider')">${Block}</button>
+                      <button type="button" id=${jobProvider._id} class="btn  mt-3 ${success}" ${isBlocked} onclick="adminBlock('${jobProvider._id}','Job-Provider')">${Block}</button>
                   </div> 
                   </div>
                 </div>
               </div>`
-               
+
             })
             let pagination = document.createElement("div")
             document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
             pagination.innerHTML = `<nav class="mt-5 mr-1">
-    <ul id="pagination" class="pagination justify-content-center">
+    <ul id="pagination" class="pagination flex-wrap justify-content-center">
     </ul>
   </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
                 document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllProviders("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
-            document.getElementById("loader").style.display = "none"
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `all-job-providers/page-number=${pageNumber}`
 
         }).catch(error => {
             alert(error.message)
@@ -1331,7 +1565,8 @@ function adminAllProviders(pageNumber) {
 }
 
 function adminAllSeekers(pageNumber) {
-    document.getElementById("loader").style.display = "block"
+    document.getElementById("loading").style.display = "block"
+
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/allseekers/${pageNumber}`, {
         method: "GET",
         headers: {
@@ -1346,12 +1581,12 @@ function adminAllSeekers(pageNumber) {
             document.getElementById("mainContainer").innerHTML = `<div id ="row" class='row justify-content-center mt-3 '></div>`
             var isBlocked = null;
             var Block = "Block"
-            var success = "success"
+            var success = "btn-outline-danger"
             responseJson.jobSeekers.forEach(jobSeeker => {
-                if (jobSeeker.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "danger" }
+                if (jobSeeker.isBlocked == true) { isBlocked = disabled; Block = "Blocked"; success = "btn-danger" }
                 document.getElementById("row").innerHTML += `<div class="col-11 col-sm-11 col-md-8 col-lg-6 col-xl-5 mt-4">
                 <div class="card">
-                  <div class="card-header bg-info"><b>Title :${jobSeeker.name}</b></div>
+                  <div class="card-header bg-info text-light"><b>Title :${jobSeeker.name}</b></div>
                   <div class="card-body">
                     <div class="row">
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Email :</b>${jobSeeker.email}</div>
@@ -1363,7 +1598,7 @@ function adminAllSeekers(pageNumber) {
                       <div class="col-12 col-sm-6 col-md-6 col-lg-6 col-xl-6"><b>Role :</b>${jobSeeker.role}</div>
                     </div>
                     <div class="text-right"> 
-                      <button type="button" id=${jobSeeker._id} class="btn btn-danger mt-3 btn-${success}" ${isBlocked} onclick="adminBlock('${jobSeeker._id}','Job-Seeker')">${Block}</button>
+                      <button type="button" id=${jobSeeker._id} class="btn mt-3 ${success}" ${isBlocked} onclick="adminBlock('${jobSeeker._id}','Job-Seeker')">${Block}</button>
                   </div> 
                   </div>
                 </div>
@@ -1371,13 +1606,14 @@ function adminAllSeekers(pageNumber) {
                 let pagination = document.createElement("div")
                 document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
                 pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination justify-content-center">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center">
         </ul>
       </nav>`
                 for (let i = 0; i <= (responseJson.count / 10); i++) {
                     document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='adminAllJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
                 }
-                document.getElementById("loader").style.display = "none"
+                document.getElementById("loading").style.display = "none"
+                window.location.hash = `all-job-seekers/page-number=${pageNumber}`
             })
 
         }).catch(error => {
@@ -1390,7 +1626,7 @@ function adminBlock(id, model) {
     console.log(id)
     console.log(model)
 
-    if(!id) return alert("Blocked Already")
+    if (!id) return alert("Blocked Already")
     fetch(`https://seasonal-jobs.herokuapp.com/api/admin/${id}/isblocked/?model=${model}`, {
         method: "PATCH",
         headers: {
@@ -1404,7 +1640,11 @@ function adminBlock(id, model) {
             document.getElementById(`${id}`).innerText = `Blocked`
             document.getElementById(`${id}`).style.backgroundColor = `red`
             document.getElementById(`${id}`).classList.add('disabled');
-            document.getElementById("message").innerText = `${responseJson.message}`
+            document.getElementById('message').innerText = `${responseJson.message}`
+            document.getElementById("message").style.color = `black`;
+            document.getElementById("messageHeader").innerText = `Woohooo...`
+            document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
+            document.getElementById("messageHeader").style.color = `white`
             messagePopupToggle();
         }).catch(error => {
             alert(error.message)
