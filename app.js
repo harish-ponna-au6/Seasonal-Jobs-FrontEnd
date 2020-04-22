@@ -405,17 +405,17 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         pincode="pincode8";
         keyword="keyword8"
     }
-    if(queryKey==`${city}`){
+    if(queryKey=="city"){
         console.log(document.getElementById(`${city}`))
         console.log(document.getElementById(`${pincode}`).value)
         document.getElementById(`${pincode}`).value=''
         document.getElementById(`${keyword}`).value=''
     }
-    else if(queryKey==`${pincode}`){
+    else if(queryKey=="pincode"){
         document.getElementById(`${city}`).value=''
         document.getElementById(`${keyword}`).value=''
     }
-    else if(queryKey==`${keyword}`){
+    else if(queryKey=="keyword"){
         document.getElementById(`${city}`).value=''
         document.getElementById(`${pincode}`).value=''
     }
