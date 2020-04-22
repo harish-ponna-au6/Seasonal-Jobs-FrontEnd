@@ -405,29 +405,28 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         pincode="pincode";
         keyword="keyword"
     }
-    if(queryKey=="city"){
-        document.getElementById("pincode").value=''
-        document.getElementById("keyword").value=''
+    if(queryKey==`${city}`){
+        document.getElementById(`${pincode}`).value=''
+        document.getElementById(`${keyword}`).value=''
     }
-    else if(queryKey=="pincode"){
-        document.getElementById("city").value=''
-        document.getElementById("keyword").value=''
+    else if(queryKey==`${pincode}`){
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${keyword}`).value=''
     }
-    else if(queryKey=="keyword"){
-        document.getElementById("city").value=''
-        document.getElementById("pincode").value=''
+    else if(queryKey==`${keyword}`){
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${pincode}`).value=''
     }
     else{
-        document.getElementById("city").value=''
-        document.getElementById("pincode").value=''
-        document.getElementById("keyword").value=''
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${pincode}`).value=''
+        document.getElementById(`${keyword}`).value=''
     }
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/filter/${pageNumber}?${queryKey}=${queryValue}`)
         .then(response => response.json())
         .then(responseJson => {
             document.getElementById("loading").style.display = "none"
-            console.log(responseJson)
             if (responseJson.count == 0) {
                 document.getElementById("mainContainer").innerHTML = `<h3 class="text-center mt-5">No Jobs Found</h3>`
                 return
