@@ -365,36 +365,7 @@ function jobsCards(responseJson) {
     });
 
 }
-
-function allJobs(pageNumber) {
-    document.getElementById("loading").style.display = "block"
-
-    fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/allavailablejobs/${pageNumber}/`)
-        .then(response => response.json())
-        .then(responseJson => {
-            document.getElementById("loading").style.display = "none"
-            jobsCards(responseJson)
-
-            let pagination = document.createElement("div")
-            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
-            pagination.innerHTML = `<nav class="mt-5 mr-1">
-        <ul id="pagination" class="pagination flex-wrap justify-content-center ">
-        </ul>
-      </nav>`
-            for (let i = 0; i <= (responseJson.count / 10); i++) {
-                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
-            }
-            document.getElementById("loading").style.display = "none"
-            window.location.hash = `all-jobs/page-number=${pageNumber}`
-        })
-        .catch(error => {
-            alert(error.message)
-            console.log(error)
-        })
-}
-
-function queryJobs(queryKey, queryValue, pageNumber) {
-    document.getElementById("loading").style.display = "block"
+function emptyingSearchField(queryKey){
     if(localStorage.getItem("Authorization")) {
         city = "city9";
         pincode="pincode9";
@@ -422,6 +393,40 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         document.getElementById(`${pincode}`).value=''
         document.getElementById(`${keyword}`).value=''
     }
+}
+
+function allJobs(pageNumber) {
+    document.getElementById("loading").style.display = "block"
+    queryKey=""
+    emptyingSearchField(queryKey)
+
+    fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/allavailablejobs/${pageNumber}/`)
+        .then(response => response.json())
+        .then(responseJson => {
+            document.getElementById("loading").style.display = "none"
+            jobsCards(responseJson)
+
+            let pagination = document.createElement("div")
+            document.getElementById('mainContainer').insertAdjacentElement("beforeend", pagination);
+            pagination.innerHTML = `<nav class="mt-5 mr-1">
+        <ul id="pagination" class="pagination flex-wrap justify-content-center ">
+        </ul>
+      </nav>`
+            for (let i = 0; i <= (responseJson.count / 10); i++) {
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+            }
+            document.getElementById("loading").style.display = "none"
+            window.location.hash = `all-jobs/page-number=${pageNumber}`
+        })
+        .catch(error => {
+            alert(error.message)
+            console.log(error)
+        })
+}
+
+function queryJobs(queryKey, queryValue, pageNumber) {
+    document.getElementById("loading").style.display = "block"
+    emptyingSearchField(queryKey)
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/filter/${pageNumber}?${queryKey}=${queryValue}`)
         .then(response => response.json())
