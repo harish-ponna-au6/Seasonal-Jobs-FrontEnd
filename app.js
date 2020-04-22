@@ -406,6 +406,8 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         keyword="keyword"
     }
     if(queryKey==`${city}`){
+        console.log(document.getElementById(`${city}`))
+        console.log(document.getElementById(`${pincode}`).value)
         document.getElementById(`${pincode}`).value=''
         document.getElementById(`${keyword}`).value=''
     }
