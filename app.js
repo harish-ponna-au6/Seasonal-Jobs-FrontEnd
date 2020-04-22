@@ -427,6 +427,7 @@ function queryJobs(queryKey, queryValue, pageNumber) {
         .then(response => response.json())
         .then(responseJson => {
             document.getElementById("loading").style.display = "none"
+            console.log(responseJson)
             if (responseJson.count == 0) {
                 document.getElementById("mainContainer").innerHTML = `<h3 class="text-center mt-5">No Jobs Found</h3>`
                 return
