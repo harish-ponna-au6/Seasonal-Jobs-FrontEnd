@@ -365,9 +365,40 @@ function jobsCards(responseJson) {
     });
 
 }
+function emptyingSearchField(queryKey){
+    if(localStorage.getItem("Authorization")) {
+        city = "city9";
+        pincode="pincode9";
+        keyword="keyword9"
+    }
+    else{
+        city = "city8";
+        pincode="pincode8";
+        keyword="keyword8"
+    }
+    if(queryKey=="city"){
+        document.getElementById(`${pincode}`).value=''
+        document.getElementById(`${keyword}`).value=''
+    }
+    else if(queryKey=="pincode"){
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${keyword}`).value=''
+    }
+    else if(queryKey=="keyword"){
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${pincode}`).value=''
+    }
+    else{
+        document.getElementById(`${city}`).value=''
+        document.getElementById(`${pincode}`).value=''
+        document.getElementById(`${keyword}`).value=''
+    }
+}
 
 function allJobs(pageNumber) {
     document.getElementById("loading").style.display = "block"
+    queryKey=""
+    emptyingSearchField(queryKey)
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/allavailablejobs/${pageNumber}/`)
         .then(response => response.json())
@@ -395,6 +426,7 @@ function allJobs(pageNumber) {
 
 function queryJobs(queryKey, queryValue, pageNumber) {
     document.getElementById("loading").style.display = "block"
+    emptyingSearchField(queryKey)
 
     fetch(`https://seasonal-jobs.herokuapp.com/api/jobseeker/searchjobs/filter/${pageNumber}?${queryKey}=${queryValue}`)
         .then(response => response.json())
