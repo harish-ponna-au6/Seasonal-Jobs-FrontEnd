@@ -648,7 +648,7 @@ function acceptedJobs(pageNumber) {
         </ul>
       </nav>`
             for (let i = 0; i <= (responseJson.count / 10); i++) {
-                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='allJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
+                document.getElementById('pagination').innerHTML += `<li class="page-item"><a onclick='acceptedJobs("${i + 1}")' class="page-link" href="#">${i + 1}</a></li>`
             }
             document.getElementById("loading").style.display = "none"
             window.location.hash = `accepted-jobs/page-number=${pageNumber}`
