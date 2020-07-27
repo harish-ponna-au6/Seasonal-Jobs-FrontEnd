@@ -923,18 +923,18 @@ function updatePicture() {
     if (user.role == "Job-Provider") var User = "jobprovider"
     if (user.role == "Job-Seeker") var User = "jobseeker"
 
-    const update = {
-        password: `${document.getElementById("updatePassword").value}`
-    }
+ 
+        const pic =document.getElementById("updatePicturee").files[0]
+const formData = new FormData()
+formData.append("image", pic)
 
     document.getElementById("loading").style.display = "block"
     fetch(`https://seasonal-jobs.herokuapp.com/api/${User}/uploadprofilepicture`, {
         method: "PATCH",
         headers: {
-            'Content-Type': 'application/json',
             "Authorization": `${(localStorage.getItem('Authorization'))}`
         },
-        body: JSON.stringify(update)
+        body: formData
     })
         .then(response => response.json())
         .then(responseJson => {
@@ -945,6 +945,7 @@ function updatePicture() {
             document.getElementById("messageHeader").innerText = `Woohooo...`
             document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
             document.getElementById("messageHeader").style.color = `white`
+	    document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.profilePicture}`)
             messagePopupToggle()
         })
 }
