@@ -944,8 +944,9 @@ formData.append("image", pic)
             document.getElementById("message").style.color = `black`;
             document.getElementById("messageHeader").innerText = `Woohooo...`
             document.getElementById("messageHeader").style.backgroundColor = `#17a2b8`
-            document.getElementById("messageHeader").style.color = `white`
-	    document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.profilePicture}`)
+            document.getElementById("messageHeader").style.color = `white`;
+if(User==="jobseeker") document.getElementsByClassName("userPic")[0].setAttribute("src", `${responseJson.profilePicture}`)
+else document.getElementsByClassName("userPic")[1].setAttribute("src", `${responseJson.profilePicture}`)
             messagePopupToggle()
         })
 }
